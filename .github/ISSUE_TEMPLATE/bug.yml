@@ -1,0 +1,39 @@
+name: Bug report
+description: Report a reproducible overlay defect
+title: 'bug: '
+labels: [bug]
+body:
+  - type: textarea
+    id: description
+    attributes:
+      label: Description
+      description: What happened and what did you expect?
+    validations:
+      required: true
+  - type: textarea
+    id: reproduce
+    attributes:
+      label: Reproduction steps
+      placeholder: |
+        1. Open...
+        2. Send...
+        3. Observe...
+    validations:
+      required: true
+  - type: input
+    id: obs-version
+    attributes:
+      label: OBS version
+    validations:
+      required: true
+  - type: input
+    id: widget-version
+    attributes:
+      label: Widget version or commit
+    validations:
+      required: true
+  - type: textarea
+    id: context
+    attributes:
+      label: Additional context
+      description: Include sanitized settings or screenshots; never include tokens or private chat data.

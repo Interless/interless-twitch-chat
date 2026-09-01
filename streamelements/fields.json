@@ -1,0 +1,522 @@
+{
+  "widgetName": {
+    "type": "hidden",
+    "value": "Role Chat Bubbles"
+  },
+  "displayTimeSeconds": {
+    "type": "slider",
+    "label": "Display time (seconds)",
+    "value": 12,
+    "min": 2,
+    "max": 120,
+    "step": 1,
+    "group": "General"
+  },
+  "maxMessages": {
+    "type": "slider",
+    "label": "Maximum messages",
+    "value": 8,
+    "min": 1,
+    "max": 30,
+    "step": 1,
+    "group": "General"
+  },
+  "minWidth": {
+    "type": "slider",
+    "label": "Minimum bubble width",
+    "value": 180,
+    "min": 100,
+    "max": 600,
+    "step": 10,
+    "group": "General"
+  },
+  "maxWidth": {
+    "type": "slider",
+    "label": "Maximum bubble width",
+    "value": 420,
+    "min": 180,
+    "max": 900,
+    "step": 10,
+    "group": "General"
+  },
+  "fontFamily": {
+    "type": "googleFont",
+    "label": "Font",
+    "value": "Inter",
+    "group": "General"
+  },
+  "fontSize": {
+    "type": "slider",
+    "label": "Font size",
+    "value": 28,
+    "min": 10,
+    "max": 72,
+    "step": 1,
+    "group": "General"
+  },
+  "lineHeight": {
+    "type": "slider",
+    "label": "Line height",
+    "value": 1.25,
+    "min": 1,
+    "max": 2,
+    "step": 0.05,
+    "group": "General"
+  },
+  "padding": {
+    "type": "slider",
+    "label": "Bubble padding",
+    "value": 16,
+    "min": 4,
+    "max": 48,
+    "step": 1,
+    "group": "General"
+  },
+  "borderRadius": {
+    "type": "slider",
+    "label": "Border radius",
+    "value": 22,
+    "min": 0,
+    "max": 80,
+    "step": 1,
+    "group": "General"
+  },
+  "borderWidth": {
+    "type": "slider",
+    "label": "Border width",
+    "value": 2,
+    "min": 0,
+    "max": 12,
+    "step": 1,
+    "group": "General"
+  },
+  "showBadges": {
+    "type": "checkbox",
+    "label": "Show Twitch badges",
+    "value": true,
+    "group": "General"
+  },
+  "showUserName": {
+    "type": "checkbox",
+    "label": "Show user name",
+    "value": true,
+    "group": "General"
+  },
+  "hideCommands": {
+    "type": "checkbox",
+    "label": "Hide command messages",
+    "value": true,
+    "group": "General"
+  },
+  "ignoredUsers": {
+    "type": "text",
+    "label": "Ignored users (comma-separated)",
+    "value": "",
+    "group": "General"
+  },
+  "edgePadding": {
+    "type": "slider",
+    "label": "Scene edge padding",
+    "value": 32,
+    "min": 0,
+    "max": 300,
+    "step": 1,
+    "group": "Placement"
+  },
+  "messageGap": {
+    "type": "slider",
+    "label": "Message gap",
+    "value": 18,
+    "min": 0,
+    "max": 150,
+    "step": 1,
+    "group": "Placement"
+  },
+  "rotationMin": {
+    "type": "slider",
+    "label": "Minimum rotation",
+    "value": -3,
+    "min": -15,
+    "max": 15,
+    "step": 0.5,
+    "group": "Placement"
+  },
+  "rotationMax": {
+    "type": "slider",
+    "label": "Maximum rotation",
+    "value": 3,
+    "min": -15,
+    "max": 15,
+    "step": 0.5,
+    "group": "Placement"
+  },
+  "maxAttempts": {
+    "type": "slider",
+    "label": "Placement attempts",
+    "value": 40,
+    "min": 1,
+    "max": 200,
+    "step": 1,
+    "group": "Placement"
+  },
+  "safeZones": {
+    "type": "text",
+    "label": "Safe zones (JSON array)",
+    "value": "[]",
+    "group": "Placement"
+  },
+  "enterAnimation": {
+    "type": "dropdown",
+    "label": "Enter animation",
+    "value": "pop",
+    "options": {
+      "pop": "Pop",
+      "fade": "Fade",
+      "slide": "Slide"
+    },
+    "group": "Animation"
+  },
+  "enterDurationMs": {
+    "type": "slider",
+    "label": "Enter duration (ms)",
+    "value": 320,
+    "min": 0,
+    "max": 3000,
+    "step": 10,
+    "group": "Animation"
+  },
+  "exitAnimation": {
+    "type": "dropdown",
+    "label": "Exit animation",
+    "value": "fade",
+    "options": {
+      "fade": "Fade",
+      "shrink": "Shrink",
+      "slide": "Slide"
+    },
+    "group": "Animation"
+  },
+  "exitDurationMs": {
+    "type": "slider",
+    "label": "Exit duration (ms)",
+    "value": 350,
+    "min": 0,
+    "max": 3000,
+    "step": 10,
+    "group": "Animation"
+  },
+  "idleIntensity": {
+    "type": "slider",
+    "label": "Idle motion intensity",
+    "value": 1,
+    "min": 0,
+    "max": 3,
+    "step": 0.1,
+    "group": "Animation"
+  },
+  "broadcasterThemeEnabled": {
+    "type": "checkbox",
+    "label": "Enable role theme",
+    "value": true,
+    "group": "Role: Broadcaster"
+  },
+  "broadcasterThemeBubbleColor": {
+    "type": "colorpicker",
+    "label": "Bubble color",
+    "value": "#7f1d1d",
+    "group": "Role: Broadcaster"
+  },
+  "broadcasterThemeTextColor": {
+    "type": "colorpicker",
+    "label": "Text color",
+    "value": "#f8fafc",
+    "group": "Role: Broadcaster"
+  },
+  "broadcasterThemeNameColor": {
+    "type": "colorpicker",
+    "label": "Name color",
+    "value": "#fecaca",
+    "group": "Role: Broadcaster"
+  },
+  "broadcasterThemeBorderColor": {
+    "type": "colorpicker",
+    "label": "Border color",
+    "value": "#f87171",
+    "group": "Role: Broadcaster"
+  },
+  "broadcasterThemeShadow": {
+    "type": "text",
+    "label": "CSS shadow",
+    "value": "0 12px 30px rgba(15, 23, 42, 0.35)",
+    "group": "Role: Broadcaster"
+  },
+  "broadcasterThemeCharacter": {
+    "type": "image-input",
+    "label": "Character image",
+    "group": "Role: Broadcaster"
+  },
+  "broadcasterThemeDecoration": {
+    "type": "image-input",
+    "label": "Decoration image",
+    "group": "Role: Broadcaster"
+  },
+  "broadcasterThemeRotation": {
+    "type": "slider",
+    "label": "Role rotation offset",
+    "value": -1,
+    "min": -8,
+    "max": 8,
+    "step": 0.5,
+    "group": "Role: Broadcaster"
+  },
+  "broadcasterThemeEffects": {
+    "type": "checkbox",
+    "label": "Enable idle effects",
+    "value": true,
+    "group": "Role: Broadcaster"
+  },
+  "moderatorThemeEnabled": {
+    "type": "checkbox",
+    "label": "Enable role theme",
+    "value": true,
+    "group": "Role: Moderator"
+  },
+  "moderatorThemeBubbleColor": {
+    "type": "colorpicker",
+    "label": "Bubble color",
+    "value": "#14532d",
+    "group": "Role: Moderator"
+  },
+  "moderatorThemeTextColor": {
+    "type": "colorpicker",
+    "label": "Text color",
+    "value": "#f8fafc",
+    "group": "Role: Moderator"
+  },
+  "moderatorThemeNameColor": {
+    "type": "colorpicker",
+    "label": "Name color",
+    "value": "#bbf7d0",
+    "group": "Role: Moderator"
+  },
+  "moderatorThemeBorderColor": {
+    "type": "colorpicker",
+    "label": "Border color",
+    "value": "#4ade80",
+    "group": "Role: Moderator"
+  },
+  "moderatorThemeShadow": {
+    "type": "text",
+    "label": "CSS shadow",
+    "value": "0 12px 30px rgba(15, 23, 42, 0.35)",
+    "group": "Role: Moderator"
+  },
+  "moderatorThemeCharacter": {
+    "type": "image-input",
+    "label": "Character image",
+    "group": "Role: Moderator"
+  },
+  "moderatorThemeDecoration": {
+    "type": "image-input",
+    "label": "Decoration image",
+    "group": "Role: Moderator"
+  },
+  "moderatorThemeRotation": {
+    "type": "slider",
+    "label": "Role rotation offset",
+    "value": 1,
+    "min": -8,
+    "max": 8,
+    "step": 0.5,
+    "group": "Role: Moderator"
+  },
+  "moderatorThemeEffects": {
+    "type": "checkbox",
+    "label": "Enable idle effects",
+    "value": true,
+    "group": "Role: Moderator"
+  },
+  "vipThemeEnabled": {
+    "type": "checkbox",
+    "label": "Enable role theme",
+    "value": true,
+    "group": "Role: VIP"
+  },
+  "vipThemeBubbleColor": {
+    "type": "colorpicker",
+    "label": "Bubble color",
+    "value": "#701a75",
+    "group": "Role: VIP"
+  },
+  "vipThemeTextColor": {
+    "type": "colorpicker",
+    "label": "Text color",
+    "value": "#f8fafc",
+    "group": "Role: VIP"
+  },
+  "vipThemeNameColor": {
+    "type": "colorpicker",
+    "label": "Name color",
+    "value": "#f5d0fe",
+    "group": "Role: VIP"
+  },
+  "vipThemeBorderColor": {
+    "type": "colorpicker",
+    "label": "Border color",
+    "value": "#e879f9",
+    "group": "Role: VIP"
+  },
+  "vipThemeShadow": {
+    "type": "text",
+    "label": "CSS shadow",
+    "value": "0 12px 30px rgba(15, 23, 42, 0.35)",
+    "group": "Role: VIP"
+  },
+  "vipThemeCharacter": {
+    "type": "image-input",
+    "label": "Character image",
+    "group": "Role: VIP"
+  },
+  "vipThemeDecoration": {
+    "type": "image-input",
+    "label": "Decoration image",
+    "group": "Role: VIP"
+  },
+  "vipThemeRotation": {
+    "type": "slider",
+    "label": "Role rotation offset",
+    "value": -0.5,
+    "min": -8,
+    "max": 8,
+    "step": 0.5,
+    "group": "Role: VIP"
+  },
+  "vipThemeEffects": {
+    "type": "checkbox",
+    "label": "Enable idle effects",
+    "value": true,
+    "group": "Role: VIP"
+  },
+  "subscriberThemeEnabled": {
+    "type": "checkbox",
+    "label": "Enable role theme",
+    "value": true,
+    "group": "Role: Subscriber"
+  },
+  "subscriberThemeBubbleColor": {
+    "type": "colorpicker",
+    "label": "Bubble color",
+    "value": "#312e81",
+    "group": "Role: Subscriber"
+  },
+  "subscriberThemeTextColor": {
+    "type": "colorpicker",
+    "label": "Text color",
+    "value": "#f8fafc",
+    "group": "Role: Subscriber"
+  },
+  "subscriberThemeNameColor": {
+    "type": "colorpicker",
+    "label": "Name color",
+    "value": "#c7d2fe",
+    "group": "Role: Subscriber"
+  },
+  "subscriberThemeBorderColor": {
+    "type": "colorpicker",
+    "label": "Border color",
+    "value": "#818cf8",
+    "group": "Role: Subscriber"
+  },
+  "subscriberThemeShadow": {
+    "type": "text",
+    "label": "CSS shadow",
+    "value": "0 12px 30px rgba(15, 23, 42, 0.35)",
+    "group": "Role: Subscriber"
+  },
+  "subscriberThemeCharacter": {
+    "type": "image-input",
+    "label": "Character image",
+    "group": "Role: Subscriber"
+  },
+  "subscriberThemeDecoration": {
+    "type": "image-input",
+    "label": "Decoration image",
+    "group": "Role: Subscriber"
+  },
+  "subscriberThemeRotation": {
+    "type": "slider",
+    "label": "Role rotation offset",
+    "value": 0.5,
+    "min": -8,
+    "max": 8,
+    "step": 0.5,
+    "group": "Role: Subscriber"
+  },
+  "subscriberThemeEffects": {
+    "type": "checkbox",
+    "label": "Enable idle effects",
+    "value": true,
+    "group": "Role: Subscriber"
+  },
+  "viewerThemeEnabled": {
+    "type": "checkbox",
+    "label": "Enable role theme",
+    "value": true,
+    "group": "Role: Viewer"
+  },
+  "viewerThemeBubbleColor": {
+    "type": "colorpicker",
+    "label": "Bubble color",
+    "value": "#334155",
+    "group": "Role: Viewer"
+  },
+  "viewerThemeTextColor": {
+    "type": "colorpicker",
+    "label": "Text color",
+    "value": "#f8fafc",
+    "group": "Role: Viewer"
+  },
+  "viewerThemeNameColor": {
+    "type": "colorpicker",
+    "label": "Name color",
+    "value": "#e2e8f0",
+    "group": "Role: Viewer"
+  },
+  "viewerThemeBorderColor": {
+    "type": "colorpicker",
+    "label": "Border color",
+    "value": "#94a3b8",
+    "group": "Role: Viewer"
+  },
+  "viewerThemeShadow": {
+    "type": "text",
+    "label": "CSS shadow",
+    "value": "0 12px 30px rgba(15, 23, 42, 0.35)",
+    "group": "Role: Viewer"
+  },
+  "viewerThemeCharacter": {
+    "type": "image-input",
+    "label": "Character image",
+    "group": "Role: Viewer"
+  },
+  "viewerThemeDecoration": {
+    "type": "image-input",
+    "label": "Decoration image",
+    "group": "Role: Viewer"
+  },
+  "viewerThemeRotation": {
+    "type": "slider",
+    "label": "Role rotation offset",
+    "value": 0,
+    "min": -8,
+    "max": 8,
+    "step": 0.5,
+    "group": "Role: Viewer"
+  },
+  "viewerThemeEffects": {
+    "type": "checkbox",
+    "label": "Enable idle effects",
+    "value": true,
+    "group": "Role: Viewer"
+  }
+}

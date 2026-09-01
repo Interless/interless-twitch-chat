@@ -1,0 +1,221 @@
+.message {
+  position: absolute;
+  z-index: 1;
+  transform-origin: center;
+  will-change: transform, opacity;
+}
+
+.motion,
+.idle {
+  display: flex;
+  align-items: flex-end;
+}
+
+.idle {
+  animation: idle 3.8s ease-in-out infinite alternate;
+}
+
+.message[data-effects='disabled'] .idle {
+  animation: none;
+}
+
+.bubble {
+  position: relative;
+  width: max-content;
+  min-width: var(--min-width);
+  max-width: var(--max-width);
+  padding: var(--padding);
+  border: var(--border-width) solid var(--border-color);
+  border-radius: var(--border-radius);
+  color: var(--text-color);
+  background: var(--bubble-color);
+  box-shadow: var(--bubble-shadow);
+  font-family: var(--font-family), system-ui, sans-serif;
+  font-size: var(--font-size);
+  line-height: var(--line-height);
+}
+
+.tail {
+  position: absolute;
+  bottom: 14px;
+  left: -12px;
+  width: 20px;
+  height: 20px;
+  border-bottom: var(--border-width) solid var(--border-color);
+  border-left: var(--border-width) solid var(--border-color);
+  background: var(--bubble-color);
+  transform: rotate(45deg);
+}
+
+.character {
+  position: relative;
+  z-index: 2;
+  display: grid;
+  flex: 0 0 74px;
+  width: 74px;
+  height: 74px;
+  margin-right: 8px;
+  place-items: center;
+}
+
+.placeholderCharacter {
+  filter: grayscale(1);
+  font-size: 52px;
+  line-height: 1;
+}
+
+.characterImage {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.placeholderDecoration,
+.decorationImage {
+  position: absolute;
+  right: -8px;
+  top: -10px;
+  width: 30px;
+  height: 30px;
+  object-fit: contain;
+  transform: rotate(25deg);
+}
+
+.placeholderDecoration {
+  filter: grayscale(1);
+  font-size: 25px;
+}
+
+.userLine {
+  display: flex;
+  align-items: center;
+  min-width: 0;
+  margin-bottom: 4px;
+  gap: 5px;
+}
+
+.userName {
+  overflow: hidden;
+  color: var(--name-color);
+  font-size: 0.72em;
+  line-height: 1.15;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.badge {
+  flex: 0 0 auto;
+  width: 0.75em;
+  height: 0.75em;
+  object-fit: contain;
+}
+
+.content {
+  display: block;
+  max-width: 100%;
+  overflow-wrap: anywhere;
+  white-space: pre-wrap;
+  unicode-bidi: plaintext;
+  word-break: break-word;
+}
+
+.emote {
+  display: inline-block;
+  width: auto;
+  height: 1.25em;
+  margin: -0.12em 0.08em;
+  vertical-align: middle;
+  object-fit: contain;
+}
+
+.message[data-lifecycle='entering'][data-enter='pop'] .motion {
+  animation: enter-pop var(--enter-duration) cubic-bezier(0.2, 0.9, 0.25, 1.2) both;
+}
+
+.message[data-lifecycle='entering'][data-enter='fade'] .motion {
+  animation: enter-fade var(--enter-duration) ease-out both;
+}
+
+.message[data-lifecycle='entering'][data-enter='slide'] .motion {
+  animation: enter-slide var(--enter-duration) ease-out both;
+}
+
+.message[data-lifecycle='exiting'][data-exit='fade'] .motion {
+  animation: exit-fade var(--exit-duration) ease-in both;
+}
+
+.message[data-lifecycle='exiting'][data-exit='shrink'] .motion {
+  animation: exit-shrink var(--exit-duration) ease-in both;
+}
+
+.message[data-lifecycle='exiting'][data-exit='slide'] .motion {
+  animation: exit-slide var(--exit-duration) ease-in both;
+}
+
+@keyframes idle {
+  from {
+    transform: translateY(calc(var(--idle-distance) * -1));
+  }
+  to {
+    transform: translateY(var(--idle-distance));
+  }
+}
+
+@keyframes enter-pop {
+  from {
+    opacity: 0;
+    transform: scale(0.75);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes enter-fade {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes enter-slide {
+  from {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes exit-fade {
+  to {
+    opacity: 0;
+  }
+}
+
+@keyframes exit-shrink {
+  to {
+    opacity: 0;
+    transform: scale(0.75);
+  }
+}
+
+@keyframes exit-slide {
+  to {
+    opacity: 0;
+    transform: translateY(-24px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .idle,
+  .motion {
+    animation-duration: 1ms !important;
+    animation-iteration-count: 1 !important;
+  }
+}

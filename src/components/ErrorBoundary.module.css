@@ -1,0 +1,13 @@
+.fallback {
+  position: absolute;
+  right: 16px;
+  bottom: 16px;
+  padding: 8px 12px;
+  border: 1px solid rgb(248 113 113 / 60%);
+  border-radius: 8px;
+  color: #fecaca;
+  background: rgb(127 29 29 / 85%);
+  font:
+    14px/1.4 system-ui,
+    sans-serif;
+}
