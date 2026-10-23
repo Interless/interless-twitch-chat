@@ -6,6 +6,7 @@ import { createActiveMessage, createChatMessage } from './fixtures';
 
 afterEach(() => {
   vi.useRealTimers();
+  vi.restoreAllMocks();
 });
 
 describe('MessageLifecycleService', () => {
@@ -16,7 +17,6 @@ describe('MessageLifecycleService', () => {
     const active = createActiveMessage({
       message: createChatMessage({ createdAt: 0 }),
       lifecycle: 'entering',
-      placement: null,
     });
 
     service.sync([active], DEFAULT_CONFIG, 0);
@@ -40,5 +40,26 @@ describe('MessageLifecycleService', () => {
     service.sync([createActiveMessage()], DEFAULT_CONFIG, 1_000);
     service.dispose();
     expect(vi.getTimerCount()).toBe(0);
+  });
+
+  it('invokes platform timers with the global receiver', () => {
+    const setTimeoutSpy = vi.spyOn(globalThis, 'setTimeout').mockImplementation(function (
+      this: typeof globalThis,
+    ) {
+      expect(this).toBe(globalThis);
+      return 1;
+    });
+    const clearTimeoutSpy = vi.spyOn(globalThis, 'clearTimeout').mockImplementation(function (
+      this: typeof globalThis,
+    ) {
+      expect(this).toBe(globalThis);
+    });
+    const service = new MessageLifecycleService(vi.fn());
+
+    service.sync([createActiveMessage()], DEFAULT_CONFIG, 1_000);
+    expect(setTimeoutSpy).toHaveBeenCalledTimes(3);
+
+    service.dispose();
+    expect(clearTimeoutSpy).toHaveBeenCalledTimes(3);
   });
 });

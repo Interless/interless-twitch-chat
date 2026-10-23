@@ -1,0 +1,78 @@
+{
+  "textColor": {
+    "label": "Текст сообщения",
+    "color": "#54218b"
+  },
+  "nameColor": {
+    "label": "Текст ника",
+    "color": "#fff5ff"
+  },
+  "headerColor": {
+    "label": "Верхняя плашка",
+    "color": "#512080"
+  },
+  "bubbleColor": {
+    "label": "Нижняя плашка",
+    "color": "#eee4f8"
+  },
+  "borderColor": {
+    "label": "Контур плашки",
+    "color": "#9956cf"
+  },
+  "frameColor": {
+    "label": "Рамка — основной цвет",
+    "color": "#ae70e2"
+  },
+  "frameShadowColor": {
+    "label": "Рамка — тёмный контур",
+    "color": "#6b2b9f"
+  },
+  "boneColor": {
+    "label": "Косточки",
+    "color": "#f5eaff"
+  },
+  "boneHighlightColor": {
+    "label": "Косточки — блики",
+    "color": "#fffaff"
+  },
+  "boneShadeColor": {
+    "label": "Косточки — тени",
+    "color": "#d4b1ef"
+  },
+  "boneOutlineColor": {
+    "label": "Косточки — контур",
+    "color": "#8d48c5"
+  },
+  "accentColor": {
+    "label": "Узор верхней плашки",
+    "color": "#c297e7"
+  },
+  "accentShadeColor": {
+    "label": "Мелкий узор верхней плашки",
+    "color": "#8c4bc0"
+  },
+  "dividerColor": {
+    "label": "Разделитель плашек",
+    "color": "#d9bcef"
+  },
+  "badgeColor": {
+    "label": "Символ значка роли",
+    "color": "#f4e7ff"
+  },
+  "badgeBackground": {
+    "label": "Фон значка роли",
+    "color": "#59218a"
+  },
+  "badgeBorder": {
+    "label": "Контур значка роли",
+    "color": "#ead8fb"
+  },
+  "shadowColor": {
+    "label": "Тень плашки",
+    "color": "#5e238b"
+  },
+  "decorationColor": {
+    "label": "Фоновые значки",
+    "color": "#b68cdb"
+  }
+}

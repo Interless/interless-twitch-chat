@@ -1,10 +1,10 @@
 {
   "name": "interless-twitch-chat",
-  "version": "0.1.0",
+  "version": "0.21.0",
   "private": true,
   "license": "MIT",
   "type": "module",
-  "description": "Production-ready Twitch chat overlay for StreamElements and OBS",
+  "description": "Customizable paleontology Twitch chat with a local editor, personal characters and StreamElements media library",
   "engines": {
     "node": "24.x",
     "npm": ">=11 <13"
@@ -18,7 +18,8 @@
     "typecheck": "tsc --noEmit -p tsconfig.app.json && tsc --noEmit -p tsconfig.node.json",
     "test": "vitest run",
     "test:watch": "vitest",
-    "check": "npm run format:check && npm run lint && npm run typecheck && npm run test && npm run build"
+    "test:preview": "node scripts/verify-preview.mjs && node scripts/verify-character-pack.mjs",
+    "check": "npm run format:check && npm run lint && npm run typecheck && npm run test && npm run build && npm run test:preview"
   },
   "dependencies": {
     "react": "19.2.8",
@@ -43,5 +44,22 @@
     "typescript-eslint": "8.69.0",
     "vite": "8.2.2",
     "vitest": "4.1.11"
-  }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Interless/interless-twitch-chat.git"
+  },
+  "homepage": "https://github.com/Interless/interless-twitch-chat#readme",
+  "bugs": {
+    "url": "https://github.com/Interless/interless-twitch-chat/issues"
+  },
+  "keywords": [
+    "twitch",
+    "streamelements",
+    "obs",
+    "chat-overlay",
+    "dinosaurs",
+    "typescript",
+    "react"
+  ]
 }

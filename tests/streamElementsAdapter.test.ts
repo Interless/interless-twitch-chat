@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 
 import {
+  StreamElementsAdapter,
   normalizeChatMessage,
   normalizeEventReceived,
 } from '../src/adapters/streamelements/StreamElementsAdapter';
@@ -90,5 +91,34 @@ describe('StreamElements event normalization', () => {
       ],
     });
     expect(message?.fragments).toEqual([{ type: 'text', text: 'Test Kappa test' }]);
+  });
+});
+
+describe('offline clear control', () => {
+  it('clears the message sequence and unsubscribes the internal control', () => {
+    const target = new EventTarget();
+    const events: unknown[] = [];
+    const unsubscribe = new StreamElementsAdapter(target).subscribe((event) => events.push(event));
+    target.dispatchEvent(new Event('interless:clear-chat'));
+    expect(events).toEqual([{ type: 'chat-cleared' }]);
+    unsubscribe();
+    target.dispatchEvent(new Event('interless:clear-chat'));
+    expect(events).toHaveLength(1);
+  });
+});
+
+describe('Twitch lead moderator signals', () => {
+  it('preserves lead moderator from raw tags when the widget image badge list is empty or incomplete', () => {
+    for (const badges of [[], [{ type: 'subscriber', version: '1' }]]) {
+      const message = normalizeChatMessage({
+        ...incomingMessage(),
+        badges,
+        tags: { badges: 'lead_moderator/1,subscriber/2', mod: '0' },
+      });
+      expect(message?.user.role).toBe('lead_moderator');
+      expect(message?.user.badges.filter((badge) => badge.type === 'lead_moderator')).toHaveLength(
+        1,
+      );
+    }
   });
 });

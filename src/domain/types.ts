@@ -1,4 +1,21 @@
-export type ChatRole = 'broadcaster' | 'moderator' | 'vip' | 'subscriber' | 'viewer';
+import type paletteTokens from '../config/paletteTokens.json';
+import type decorationIcons from '../config/decorationIcons.json';
+
+export type PaletteKey = keyof typeof paletteTokens;
+export type CustomColors = Partial<Record<PaletteKey, string>>;
+export type DecorationKind = keyof typeof decorationIcons;
+
+export interface DecorationConfig {
+  enabled: boolean;
+  icons: DecorationKind[];
+  density: number;
+  chance: number;
+  frequency: number;
+  opacity: number;
+}
+
+export type ChatRole =
+  'broadcaster' | 'lead_moderator' | 'moderator' | 'vip' | 'subscriber' | 'viewer';
 
 export interface ChatBadge {
   type: string;
@@ -47,34 +64,13 @@ export interface RoleAssets {
 export interface RoleTheme {
   enabled: boolean;
   bubbleColor: string;
+  headerColor: string;
   textColor: string;
   nameColor: string;
   borderColor: string;
   shadow: string;
-  rotationOffset: number;
   effectEnabled: boolean;
   assets: RoleAssets;
-}
-
-export interface Rectangle {
-  x: number;
-  y: number;
-  width: number;
-  height: number;
-}
-
-export interface Dimensions {
-  width: number;
-  height: number;
-}
-
-export interface PlacementResult {
-  x: number;
-  y: number;
-  rotation: number;
-  collisionRect: Rectangle;
-  attempts: number;
-  usedFallback: boolean;
 }
 
 export type MessageLifecycleState = 'entering' | 'visible' | 'exiting' | 'removed';
@@ -82,7 +78,8 @@ export type MessageLifecycleState = 'entering' | 'visible' | 'exiting' | 'remove
 export interface ActiveMessage {
   message: ChatMessage;
   lifecycle: MessageLifecycleState;
-  placement: PlacementResult | null;
+  side: 'left' | 'right';
+  characterId: string | null;
 }
 
 export interface GeneralConfig {
@@ -104,6 +101,7 @@ export interface GeneralConfig {
 
 export type EnterAnimation = 'pop' | 'fade' | 'slide';
 export type ExitAnimation = 'fade' | 'shrink' | 'slide';
+export type IdleMotion = 'off' | 'float' | 'pixel' | 'chaotic';
 
 export interface AnimationConfig {
   enter: EnterAnimation;
@@ -111,22 +109,43 @@ export interface AnimationConfig {
   exit: ExitAnimation;
   exitDurationMs: number;
   idleIntensity: number;
+  idleMotion: IdleMotion;
+  idleFrequency: number;
 }
 
-export interface PlacementConfig {
-  edgePadding: number;
+export type ChatAlignment = 'left' | 'center' | 'right';
+
+export interface Dinosaur {
+  name: string;
+  characterUrl: string | null;
+}
+
+export interface LayoutConfig {
+  scale: number;
+  alignment: ChatAlignment;
+  horizontalOffset: number;
+  bottomOffset: number;
   messageGap: number;
-  maxAttempts: number;
-  rotationMin: number;
-  rotationMax: number;
-  safeZones: Rectangle[];
+  characterSide: 'alternating' | 'left' | 'right';
+  characterSize: number;
+}
+
+export interface AppearanceConfig {
+  customColors?: CustomColors;
+  colorScheme: 'roles' | 'light' | 'dark';
+  bubbleOpacity: number;
+  headerOpacity: number;
 }
 
 export interface WidgetConfig {
+  decorations: DecorationConfig;
+  appearance: AppearanceConfig;
   general: GeneralConfig;
-  placement: PlacementConfig;
+  layout: LayoutConfig;
   animation: AnimationConfig;
   roleThemes: Record<ChatRole, RoleTheme>;
+  dinosaurs: Record<string, Dinosaur>;
+  userDinosaurs: Record<string, string>;
 }
 
 export interface StreamElementsWidgetLoadEvent {
@@ -143,6 +162,7 @@ export interface StreamElementsReceivedEvent {
 }
 
 export type NormalizedWidgetEvent =
+  | { type: 'preview-characters-selected'; characterIds: string[]; userId?: string }
   | { type: 'config-loaded'; config: WidgetConfig }
   | { type: 'message-received'; message: ChatMessage }
   | { type: 'message-deleted'; messageId: string }

@@ -1,122 +1,268 @@
 .message {
-  position: absolute;
+  --display-character-size: min(var(--character-size), calc(30vw / var(--chat-scale, 1)));
+  position: relative;
   z-index: 1;
-  transform-origin: center;
-  will-change: transform, opacity;
+  flex: 0 0 auto;
+  max-width: 100%;
+  will-change: opacity;
 }
 
 .motion,
 .idle {
   display: flex;
-  align-items: flex-end;
+  align-items: center;
+  max-width: 100%;
 }
 
-.idle {
-  animation: idle 3.8s ease-in-out infinite alternate;
-}
-
-.message[data-effects='disabled'] .idle {
-  animation: none;
+.message[data-has-character='false'] {
+  --display-character-size: 0px;
 }
 
 .bubble {
   position: relative;
+  z-index: 1;
   width: max-content;
-  min-width: var(--min-width);
-  max-width: var(--max-width);
-  padding: var(--padding);
+  min-width: min(
+    var(--min-width),
+    max(
+      0px,
+      var(--chat-viewport-width, 100vw) - 2 *
+        var(--chat-horizontal-padding, var(--horizontal-offset, 32px)) -
+        var(--display-character-size)
+    )
+  );
+  max-width: min(
+    var(--max-width),
+    max(
+      0px,
+      var(--chat-viewport-width, 100vw) - 2 *
+        var(--chat-horizontal-padding, var(--horizontal-offset, 32px)) -
+        var(--display-character-size)
+    )
+  );
   border: var(--border-width) solid var(--border-color);
   border-radius: var(--border-radius);
   color: var(--text-color);
-  background: var(--bubble-color);
+  background: transparent;
   box-shadow: var(--bubble-shadow);
-  font-family: var(--font-family), system-ui, sans-serif;
+  font-family: var(--font-family), monospace;
   font-size: var(--font-size);
   line-height: var(--line-height);
+  animation-duration: var(--idle-duration);
+  animation-delay: var(--idle-delay);
+  animation-direction: var(--idle-direction);
+  animation-iteration-count: infinite;
 }
 
-.tail {
+.message[data-idle='float'] .bubble {
+  animation-name: idle-float;
+  animation-timing-function: ease-in-out;
+}
+
+.message[data-idle='pixel'] .bubble {
+  animation-name: idle-pixel;
+  animation-timing-function: steps(1, end);
+}
+
+.message[data-idle='chaotic'] .bubble {
+  animation-name: idle-chaotic;
+  animation-timing-function: steps(1, end);
+}
+
+.message[data-idle='off'] .bubble,
+.message[data-effects='disabled'] .bubble {
+  animation: none;
+}
+
+.frame {
   position: absolute;
-  bottom: 14px;
-  left: -12px;
-  width: 20px;
-  height: 20px;
-  border-bottom: var(--border-width) solid var(--border-color);
-  border-left: var(--border-width) solid var(--border-color);
-  background: var(--bubble-color);
-  transform: rotate(45deg);
+  z-index: 3;
+  inset: -16px;
+  border: 32px solid transparent;
+  border-image: var(--frame-image, url('../assets/bone-frame.svg')) 32 / 32px / 0 stretch;
+  pointer-events: none;
+}
+
+.bubble::after {
+  content: '';
+  position: absolute;
+  z-index: 3;
+  bottom: -15px;
+  left: 20px;
+  right: 20px;
+  height: 18px;
+  background: var(--drips-image, url('../assets/bone-drips.svg')) left top / 96px 18px repeat-x;
+  pointer-events: none;
 }
 
 .character {
   position: relative;
   z-index: 2;
-  display: grid;
-  flex: 0 0 74px;
-  width: 74px;
-  height: 74px;
-  margin-right: 8px;
-  place-items: center;
+  display: block;
+  flex: 0 0 var(--display-character-size);
+  width: var(--display-character-size);
+  height: var(--display-character-size);
+  margin-right: -18px;
 }
 
-.placeholderCharacter {
-  filter: grayscale(1);
-  font-size: 52px;
-  line-height: 1;
+.message[data-character-side='right'] .character {
+  order: 2;
+  margin-right: 0;
+  margin-left: -18px;
 }
 
 .characterImage {
+  display: block;
   width: 100%;
   height: 100%;
   object-fit: contain;
+  image-rendering: auto;
 }
 
-.placeholderDecoration,
+.character[data-packed='true'] {
+  overflow: hidden;
+}
+.character[data-packed='true'] .characterImage {
+  position: absolute;
+  max-width: none;
+  width: var(--sprite-width);
+  height: var(--sprite-height);
+  left: var(--sprite-left);
+  top: var(--sprite-top);
+}
+
+.message[data-character-side='right'] .character[data-packed='true'] {
+  transform: scaleX(-1);
+}
+
 .decorationImage {
   position: absolute;
-  right: -8px;
-  top: -10px;
-  width: 30px;
-  height: 30px;
+  right: 0;
+  top: 0;
+  width: 32px;
+  height: 32px;
   object-fit: contain;
-  transform: rotate(25deg);
-}
-
-.placeholderDecoration {
-  filter: grayscale(1);
-  font-size: 25px;
+  image-rendering: auto;
 }
 
 .userLine {
   display: flex;
   align-items: center;
   min-width: 0;
-  margin-bottom: 4px;
-  gap: 5px;
+  position: relative;
+  min-height: 38px;
+  padding: 5px 8px;
+  gap: 8px;
+  color: var(--name-color);
+  background-color: var(--header-fill);
+  border-bottom: 1px solid var(--divider-color, #d9bcef);
+  border-radius: max(0px, var(--border-radius) - var(--border-width))
+    max(0px, var(--border-radius) - var(--border-width)) 0 0;
+  background-image: var(--nameplate-image, url('../assets/nameplate-edge.svg'));
+  background-position: top;
+  background-size: 160px 12px;
+  background-repeat: repeat-x;
+}
+
+.message[data-character-side='left'] .roleBadge {
+  order: 2;
+  margin-left: auto;
+}
+
+.roleBadge {
+  flex: 0 0 28px;
+  width: 28px;
+  height: 28px;
+  color: #f5e4ff;
 }
 
 .userName {
+  min-width: 0;
+  flex: 1 1 auto;
   overflow: hidden;
   color: var(--name-color);
-  font-size: 0.72em;
-  line-height: 1.15;
+  font-size: 0.75em;
+  font-weight: 400;
+  line-height: 1.5;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
 
 .badge {
   flex: 0 0 auto;
-  width: 0.75em;
-  height: 0.75em;
+  width: 1em;
+  height: 1em;
   object-fit: contain;
+  image-rendering: auto;
 }
 
 .content {
+  position: relative;
+  isolation: isolate;
   display: block;
+  min-height: 2.5em;
   max-width: 100%;
+  padding: var(--padding);
+  padding-bottom: calc(var(--padding) + 18px);
+  padding-right: calc(var(--padding) + 14px);
+  background: var(--bubble-fill);
   overflow-wrap: anywhere;
   white-space: pre-wrap;
   unicode-bidi: plaintext;
   word-break: break-word;
+}
+
+.contentText {
+  position: relative;
+  z-index: 1;
+  display: block;
+}
+
+.decorations {
+  position: absolute;
+  z-index: 0;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+  user-select: none;
+  color: var(--decoration-color);
+}
+
+.backgroundIcon {
+  position: absolute;
+  display: block;
+  transform-origin: 50% 50%;
+  transform-box: border-box;
+}
+
+.decorationLayer {
+  position: absolute;
+  inset: 0;
+  animation: decoration-appear 900ms ease-in-out;
+}
+
+.decorationLayer[data-decoration-refresh='running'] {
+  animation:
+    decoration-appear 900ms ease-in-out,
+    decoration-disappear 900ms ease-in-out var(--decoration-hold) forwards;
+}
+
+@keyframes decoration-appear {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes decoration-disappear {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
 }
 
 .emote {
@@ -152,12 +298,68 @@
   animation: exit-slide var(--exit-duration) ease-in both;
 }
 
-@keyframes idle {
-  from {
+@keyframes idle-float {
+  0%,
+  100% {
     transform: translateY(calc(var(--idle-distance) * -1));
   }
-  to {
+  50% {
     transform: translateY(var(--idle-distance));
+  }
+}
+
+@keyframes idle-pixel {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  12% {
+    transform: translateY(calc(var(--idle-small) * -1));
+  }
+  24% {
+    transform: translateY(calc(var(--idle-half) * -1));
+  }
+  38% {
+    transform: translateY(calc(var(--idle-distance) * -1));
+  }
+  51% {
+    transform: translateY(calc(var(--idle-half) * -1));
+  }
+  65% {
+    transform: translateY(0);
+  }
+  79% {
+    transform: translateY(var(--idle-half));
+  }
+  91% {
+    transform: translateY(var(--idle-small));
+  }
+}
+
+@keyframes idle-chaotic {
+  0%,
+  100% {
+    transform: translate(0, 0);
+  }
+  11%,
+  18% {
+    transform: translate(var(--idle-lateral), calc(var(--idle-small) * -1));
+  }
+  29% {
+    transform: translate(calc(var(--idle-lateral) * -1), var(--idle-half));
+  }
+  43%,
+  51% {
+    transform: translate(0, calc(var(--idle-distance) * -1));
+  }
+  66% {
+    transform: translate(var(--idle-lateral), var(--idle-small));
+  }
+  78% {
+    transform: translate(0, var(--idle-distance));
+  }
+  91% {
+    transform: translate(calc(var(--idle-lateral) * -1), 0);
   }
 }
 
@@ -213,7 +415,10 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .idle,
+  .bubble,
+  .backgroundIcon {
+    animation: none !important;
+  }
   .motion {
     animation-duration: 1ms !important;
     animation-iteration-count: 1 !important;

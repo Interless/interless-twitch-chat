@@ -1,17 +1,18 @@
 import type { ChatRole, RoleAssets } from './types';
-
-const PLACEHOLDER_CHARACTER: Record<ChatRole, string> = {
-  broadcaster: '💀',
-  moderator: '☠️',
-  vip: '🦴',
-  subscriber: '💀',
-  viewer: '☠️',
-};
-
+import { CHARACTER_URLS, CHARACTER_IDS } from './characterRegistry';
 export interface ResolvedRoleAssets extends RoleAssets {
-  placeholder: string;
+  builtin: boolean;
+  builtinId: string | null;
 }
-
-export function resolveRoleAssets(role: ChatRole, assets: RoleAssets): ResolvedRoleAssets {
-  return { ...assets, placeholder: PLACEHOLDER_CHARACTER[role] };
+export function resolveRoleAssets(
+  _role: ChatRole,
+  assets: RoleAssets,
+  characterId?: string | null,
+): ResolvedRoleAssets {
+  const characterUrl = assets.characterUrl ?? CHARACTER_URLS[CHARACTER_IDS[0] ?? ''] ?? null;
+  const builtinId =
+    CHARACTER_IDS.find((id) => id === characterId && characterUrl === CHARACTER_URLS[id]) ??
+    CHARACTER_IDS.find((id) => characterUrl === CHARACTER_URLS[id]) ??
+    null;
+  return { ...assets, characterUrl, builtin: builtinId !== null, builtinId };
 }

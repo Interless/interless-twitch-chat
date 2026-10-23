@@ -1,0 +1,46 @@
+{
+  "bone": {
+    "label": "Косточка",
+    "path": "M8 10h8l2-3h3l2 2v3l-2 2 2 2v3l-2 2h-3l-2-3H8l-2 3H3l-2-2v-3l2-2-2-2V9l2-2h3z"
+  },
+  "book": {
+    "label": "Книга",
+    "path": "M2 4h7l3 2 3-2h7v15h-7l-3 2-3-2H2zm2 2v11h5l2 1V8L8 6zm9 2v10l2-1h5V6h-5zM6 9h3v2H6zm9 0h3v2h-3zM6 13h3v2H6zm9 0h3v2h-3z"
+  },
+  "ammonite": {
+    "label": "Аммонит",
+    "path": "M7 2h10v2h3v3h2v10h-2v3h-3v2H7v-2H4v-3H2V7h2V4h3zm1 3v2H6v3H5v5h2v3h3v1h6v-2h3v-6h-2V8h-6v2H9v5h5v-3h-3v-1h5v5h-2v1H9v-2H7v-5h2V8h3V6h5V5zm9 15h4v2h-4z"
+  },
+  "hammer": {
+    "label": "Геологический молоток",
+    "path": "M2 3h8v1h6l4 2 3 4v2h-2l-3-3-4-1h-2v2h-1v7h1v5H7v-5h1v-7H2zM4 5h4v3H4zM8 18h3v1H8zM8 20h3v1H8z"
+  },
+  "footprint": {
+    "label": "След динозавра",
+    "path": "M11 1h2v2h1v7h2V8h1V6h2V4h3v3h-1v2h-2v3h-2v2h-2v4h-1v3h-2v2h-2v-2H9v-3H8v-4H6v-2H4V9H2V4h3v2h2v2h1v2h3z"
+  },
+  "skull": {
+    "label": "Череп динозавра",
+    "path": "M5 3h11v2h4v3h2v7h-3v2h-2v4H5v-3H3v-4H1V8h3V5h1zM7 7h5v5H7zM16 9h3v3h-3zM7 16v3h2v-3zm4 0v3h2v-3zm4 0v3h1v-3z"
+  },
+  "trilobite": {
+    "label": "Трилобит",
+    "path": "M8 2h8v2h3v3h2v10h-2v3h-3v2H8v-2H5v-3H3V7h2V4h3zM7 5h2v2H7zm8 0h2v2h-2zM5 9h5v2H5zm9 0h5v2h-5zM5 13h5v2H5zm9 0h5v2h-5zM7 17h3v2H7zm7 0h3v2h-3z"
+  },
+  "fern": {
+    "label": "Папоротник",
+    "path": "M11 2h2v20h-2zM11 8H8V6H5V3h3v2h3zm2-2V3h6v2h-2v1zM11 13H8v-2H4V7h3v2h4zm2-1V9h4V7h4v4h-4v1zM11 18H7v-2H3v-4h3v2h5zm2-1v-3h5v-2h4v4h-5v1z"
+  },
+  "brush": {
+    "label": "Кисточка",
+    "path": "M10 1h4v11h3v3h2v8H5v-8h2v-3h3zM8 17h1v5H8zm3 0h2v5h-2zm4 0h1v5h-1zM9 13h6v1H9z"
+  },
+  "flask": {
+    "label": "Колба",
+    "path": "M8 1h8v3h-1v5l6 9v4H3v-4l6-9V4H8zM11 4v6l-5 8v2h12v-2l-5-8V4zM8 16h8l2 3H6z"
+  },
+  "beer": {
+    "label": "Бутылка пива",
+    "path": "M9 1h6v3h-1v5l3 3v10H7V12l3-3V4H9zM9 14h6v5H9zM11 5h1v4h-1z"
+  }
+}

@@ -9,7 +9,14 @@ function badges(...types: string[]): ChatBadge[] {
 
 describe('resolveRole', () => {
   it('documents the expected priority in one exported constant', () => {
-    expect(ROLE_PRIORITY).toEqual(['broadcaster', 'moderator', 'vip', 'subscriber', 'viewer']);
+    expect(ROLE_PRIORITY).toEqual([
+      'broadcaster',
+      'lead_moderator',
+      'moderator',
+      'vip',
+      'subscriber',
+      'viewer',
+    ]);
   });
 
   it('selects the highest role when several badges are present', () => {
@@ -25,5 +32,24 @@ describe('resolveRole', () => {
   it('uses tag signals and falls back to viewer', () => {
     expect(resolveRole({ badges: [], isModerator: true, isSubscriber: true })).toBe('moderator');
     expect(resolveRole({ badges: [], isModerator: false, isSubscriber: false })).toBe('viewer');
+  });
+});
+
+describe('lead moderator', () => {
+  it('recognizes the Twitch lead_moderator badge even when the mod flag is absent and takes priority over other viewer roles', () => {
+    expect(
+      resolveRole({
+        badges: badges('vip', 'subscriber', 'lead_moderator'),
+        isModerator: false,
+        isSubscriber: true,
+      }),
+    ).toBe('lead_moderator');
+    expect(
+      resolveRole({
+        badges: badges('lead_moderator', 'broadcaster'),
+        isModerator: true,
+        isSubscriber: false,
+      }),
+    ).toBe('broadcaster');
   });
 });

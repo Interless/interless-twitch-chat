@@ -1,0 +1,122 @@
+[
+  {
+    "family": "Press Start 2P",
+    "group": "Пиксельные",
+    "size": 16,
+    "file": "press-start-2p.woff2",
+    "license": "OFL.txt",
+    "source": "https://github.com/google/fonts/tree/main/ofl/pressstart2p",
+    "sha256": "dd9351f1e484c499cc046596e8cdf828e2a52f6848f3a482cb3ce06010aab857",
+    "bytes": 29020,
+    "sourceFile": "press-start-2p.ttf",
+    "sourceSha256": "7b939b816f8ce185dd8c2c59e85fb05d3dcd5cde0c0b0de4a1651cb5af9c2c2b"
+  },
+  {
+    "family": "Tiny5",
+    "group": "Пиксельные",
+    "size": 30,
+    "file": "tiny5.woff2",
+    "license": "tiny5-OFL.txt",
+    "source": "https://raw.githubusercontent.com/google/fonts/bf7c667ae010c0ffb39944ae85097021478cb91d/ofl/tiny5/Tiny5%5BBLED%2CJITT%2CROND%2Cwdth%2Cwght%5D.ttf",
+    "sha256": "771fb33e727a56fa4982df97c9fb4a07dd27a5c9ad752dea60a21d4e9d666c76",
+    "bytes": 72860,
+    "sourceFile": "tiny5.ttf",
+    "sourceSha256": "588626f2c1b164f55927c0d8123f4bc134651aad7d257da68fc19b0824b0d8fa"
+  },
+  {
+    "family": "PT Sans",
+    "group": "Обычные",
+    "size": 24,
+    "file": "ptsans.woff2",
+    "license": "ptsans-OFL.txt",
+    "source": "https://raw.githubusercontent.com/google/fonts/bf7c667ae010c0ffb39944ae85097021478cb91d/ofl/ptsans/PT_Sans-Web-Regular.ttf",
+    "sha256": "39a0e43efc7d04d7ce3624c63e8c044e7cd3e1c489a56cc88fbf0dc270efc619",
+    "bytes": 132192,
+    "sourceFile": "ptsans.ttf",
+    "sourceSha256": "9cc831490532009bae2b3ce0d39c62adfc889060beb421593bfd9d2396d0f10a"
+  },
+  {
+    "family": "Rubik",
+    "group": "Обычные",
+    "size": 24,
+    "file": "rubik.woff2",
+    "license": "rubik-OFL.txt",
+    "source": "https://raw.githubusercontent.com/google/fonts/bf7c667ae010c0ffb39944ae85097021478cb91d/ofl/rubik/Rubik%5Bwght%5D.ttf",
+    "sha256": "8358f0a47ba7922be1c6c6ee17d6ed2acbf914ab0726126ef6764033c26cadf2",
+    "bytes": 112420,
+    "sourceFile": "rubik.ttf",
+    "sourceSha256": "1b3a7437ba2af80e465e773ed60c5036d1ba6ace492d89046dbcf18fb31e4e88"
+  },
+  {
+    "family": "Comfortaa",
+    "group": "Обычные",
+    "size": 22,
+    "file": "comfortaa.woff2",
+    "license": "comfortaa-OFL.txt",
+    "source": "https://raw.githubusercontent.com/google/fonts/bf7c667ae010c0ffb39944ae85097021478cb91d/ofl/comfortaa/Comfortaa%5Bwght%5D.ttf",
+    "sha256": "c87a13f22edaf4c6de52e4c00f94c9cb0497739be765956f7fcfaf3903ea6b6d",
+    "bytes": 79988,
+    "sourceFile": "comfortaa.ttf",
+    "sourceSha256": "0fc3f45dc48b614db9c39181502544b37217ecbf8bee2fb35886992bc96c5bd3"
+  },
+  {
+    "family": "Lora",
+    "group": "С засечками",
+    "size": 24,
+    "file": "lora.woff2",
+    "license": "lora-OFL.txt",
+    "source": "https://raw.githubusercontent.com/google/fonts/bf7c667ae010c0ffb39944ae85097021478cb91d/ofl/lora/Lora%5Bwght%5D.ttf",
+    "sha256": "7c514f026f03de1b0fc344c0c0f0df141fcf16b6f9ab672db191908ba740dab6",
+    "bytes": 85096,
+    "sourceFile": "lora.ttf",
+    "sourceSha256": "822a6621ccbe8d97d20ac88c1c41f5615c9c2c202eaa75f272cd452aac6475a7"
+  },
+  {
+    "family": "Marck Script",
+    "group": "Рукописные",
+    "size": 28,
+    "file": "marckscript.woff2",
+    "license": "marckscript-OFL.txt",
+    "source": "https://raw.githubusercontent.com/google/fonts/bf7c667ae010c0ffb39944ae85097021478cb91d/ofl/marckscript/MarckScript-Regular.ttf",
+    "sha256": "617e52704df903f85095d88baea9eeb6fdd0d59a9eddacacf9944f7ac02a7ac6",
+    "bytes": 27316,
+    "sourceFile": "marckscript.ttf",
+    "sourceSha256": "504de8cc6f919163bc9afb67b9bc208d258230c5e8d00cb82ec52474f9fafc3b"
+  },
+  {
+    "family": "Bad Script",
+    "group": "Рукописные",
+    "size": 26,
+    "file": "badscript.woff2",
+    "license": "badscript-OFL.txt",
+    "source": "https://raw.githubusercontent.com/google/fonts/bf7c667ae010c0ffb39944ae85097021478cb91d/ofl/badscript/BadScript-Regular.ttf",
+    "sha256": "6951e36c5d496ee714b84e0a021c5f90cca491025274c34303037e43998b08ce",
+    "bytes": 80292,
+    "sourceFile": "badscript.ttf",
+    "sourceSha256": "40ec737eee65ec4efbc24ae636fa31d7d84d1ccca83ab54cd555edb72cb3eaf0"
+  },
+  {
+    "family": "Caveat",
+    "group": "Рукописные",
+    "size": 30,
+    "file": "caveat.woff2",
+    "license": "caveat-OFL.txt",
+    "source": "https://raw.githubusercontent.com/google/fonts/bf7c667ae010c0ffb39944ae85097021478cb91d/ofl/caveat/Caveat%5Bwght%5D.ttf",
+    "sha256": "c7d6a0ad1cbe120518b64ca8c5dac3c064bdfdb3cdc62f472c571f4a769ace9f",
+    "bytes": 173468,
+    "sourceFile": "caveat.ttf",
+    "sourceSha256": "0bdb6b660482d31531b3945849fba5916b3ef8695da7024a9e6b9ee3c4157988"
+  },
+  {
+    "family": "Neucha",
+    "group": "Рукописные",
+    "size": 26,
+    "file": "neucha.woff2",
+    "license": "neucha-OFL.txt",
+    "source": "https://raw.githubusercontent.com/google/fonts/bf7c667ae010c0ffb39944ae85097021478cb91d/ofl/neucha/Neucha.ttf",
+    "sha256": "8e3419331597a91c4988f58101c3d4c40f430c4d48339c8b3cc39c80af3ea78a",
+    "bytes": 47668,
+    "sourceFile": "neucha.ttf",
+    "sourceSha256": "7927bd6ce090fa032857dcbc3ad0e8b765c462d0a72a8779068132496b4e087d"
+  }
+]

@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="300" viewBox="0 0 1200 300" role="img" aria-labelledby="title desc">
+  <title id="title">Interless Chat</title>
+  <desc id="desc">Палеонтологический Twitch-чат: локальное превью, свои персонажи, StreamElements и OBS.</desc>
+  <rect width="1200" height="300" rx="20" fill="#211b2f"/>
+  <path d="M32 12h1136v8h20v20h-8v220h8v20h-20v8H32v-8H12v-20h8V40h-8V20h20z" fill="none" stroke="#9956cf" stroke-width="6"/>
+  <g fill="#ead8fb" shape-rendering="crispEdges">
+    <path d="M30 30h10v8h22v10H40v8H30V46h-8V38h8zM1170 30h-10v8h-22v10h22v8h10V46h8V38h-8zM30 270h10v-8h22v-10H40v-8H30v10h-8v8h8zM1170 270h-10v-8h-22v-10h22v-8h10v10h8v8h-8z"/>
+  </g>
+  <text x="74" y="100" fill="#f4e7ff" font-family="Arial, sans-serif" font-weight="700" font-size="52">Interless Chat</text>
+  <text x="76" y="141" fill="#d4b7ec" font-family="Arial, sans-serif" font-size="23">Твой чат. Свои динозавры. Косточки на месте.</text>
+  <g font-family="Arial, sans-serif" font-size="17" fill="#eee4f8">
+    <rect x="76" y="172" width="190" height="36" rx="7" fill="#512080"/>
+    <text x="93" y="196">Локальное превью</text>
+    <rect x="278" y="172" width="183" height="36" rx="7" fill="#512080"/>
+    <text x="295" y="196">Свои персонажи</text>
+    <rect x="473" y="172" width="217" height="36" rx="7" fill="#512080"/>
+    <text x="490" y="196">StreamElements + OBS</text>
+  </g>
+  <text x="76" y="248" fill="#bd9ed4" font-family="Arial, sans-serif" font-size="17">Настрой → Скопируй код → Выбери медиа → В эфир</text>
+  <g transform="translate(941 73) scale(6.2)" fill="#b68cdb" fill-rule="evenodd" shape-rendering="crispEdges">
+    <path d="M7 2h10v2h3v3h2v10h-2v3h-3v2H7v-2H4v-3H2V7h2V4h3zm1 3v2H6v3H5v5h2v3h3v1h6v-2h3v-6h-2V8h-6v2H9v5h5v-3h-3v-1h5v5h-2v1H9v-2H7v-5h2V8h3V6h5V5zm9 15h4v2h-4z"/>
+  </g>
+</svg>

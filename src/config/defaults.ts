@@ -1,14 +1,16 @@
+import { loadedDinosaurs } from '../domain/characterRegistry';
+import { DARK_PALETTE } from './palettes';
 import type { ChatRole, RoleTheme, WidgetConfig } from '../domain/types';
 
 function theme(overrides: Partial<RoleTheme>): RoleTheme {
   return {
     enabled: true,
-    bubbleColor: '#334155',
-    textColor: '#f8fafc',
-    nameColor: '#e2e8f0',
-    borderColor: '#94a3b8',
-    shadow: '0 12px 30px rgba(15, 23, 42, 0.35)',
-    rotationOffset: 0,
+    bubbleColor: '#eee4f8',
+    headerColor: '#512080',
+    textColor: '#54218b',
+    nameColor: '#fff5ff',
+    borderColor: '#9956cf',
+    shadow: '0 2px 0 #5e238b',
     effectEnabled: true,
     assets: { characterUrl: null, decorationUrl: null },
     ...overrides,
@@ -16,57 +18,60 @@ function theme(overrides: Partial<RoleTheme>): RoleTheme {
 }
 
 export const DEFAULT_ROLE_THEMES: Record<ChatRole, RoleTheme> = {
-  broadcaster: theme({
-    bubbleColor: '#7f1d1d',
-    nameColor: '#fecaca',
-    borderColor: '#f87171',
-    rotationOffset: -1,
-  }),
-  moderator: theme({
-    bubbleColor: '#14532d',
-    nameColor: '#bbf7d0',
-    borderColor: '#4ade80',
-    rotationOffset: 1,
-  }),
-  vip: theme({
-    bubbleColor: '#701a75',
-    nameColor: '#f5d0fe',
-    borderColor: '#e879f9',
-    rotationOffset: -0.5,
-  }),
-  subscriber: theme({
-    bubbleColor: '#312e81',
-    nameColor: '#c7d2fe',
-    borderColor: '#818cf8',
-    rotationOffset: 0.5,
-  }),
+  broadcaster: theme({ headerColor: '#512080' }),
+  lead_moderator: theme(DARK_PALETTE),
+  moderator: theme({ headerColor: '#512080' }),
+  vip: theme({ headerColor: '#512080' }),
+  subscriber: theme(DARK_PALETTE),
   viewer: theme({}),
 };
 
 export const DEFAULT_CONFIG: WidgetConfig = {
+  decorations: {
+    enabled: true,
+    icons: [
+      'bone',
+      'book',
+      'ammonite',
+      'hammer',
+      'footprint',
+      'skull',
+      'trilobite',
+      'fern',
+      'brush',
+      'flask',
+      'beer',
+    ],
+    density: 25,
+    chance: 100,
+    frequency: 20,
+    opacity: 0.18,
+  },
+  appearance: { colorScheme: 'roles', bubbleOpacity: 1, headerOpacity: 1 },
   general: {
     displayTimeMs: 12_000,
     maxMessages: 8,
-    minWidth: 180,
-    maxWidth: 420,
-    fontFamily: 'Inter',
-    fontSize: 28,
-    lineHeight: 1.25,
-    padding: 16,
-    borderRadius: 22,
+    minWidth: 210,
+    maxWidth: 260,
+    fontFamily: 'Press Start 2P',
+    fontSize: 16,
+    lineHeight: 1.5,
+    padding: 14,
+    borderRadius: 8,
     borderWidth: 2,
     showBadges: true,
     showUserName: true,
     hideCommands: true,
     ignoredUsers: [],
   },
-  placement: {
-    edgePadding: 32,
-    messageGap: 18,
-    maxAttempts: 40,
-    rotationMin: -3,
-    rotationMax: 3,
-    safeZones: [],
+  layout: {
+    scale: 1,
+    alignment: 'left',
+    horizontalOffset: 32,
+    bottomOffset: 32,
+    messageGap: 30,
+    characterSide: 'alternating',
+    characterSize: 172,
   },
   animation: {
     enter: 'pop',
@@ -74,6 +79,10 @@ export const DEFAULT_CONFIG: WidgetConfig = {
     exit: 'fade',
     exitDurationMs: 350,
     idleIntensity: 1,
+    idleMotion: 'pixel',
+    idleFrequency: 20,
   },
   roleThemes: DEFAULT_ROLE_THEMES,
+  dinosaurs: loadedDinosaurs(),
+  userDinosaurs: {},
 };

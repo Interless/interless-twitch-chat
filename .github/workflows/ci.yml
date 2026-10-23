@@ -48,6 +48,9 @@ jobs:
       - name: Build StreamElements package
         run: npm run build
 
+      - name: Verify built preview and clipboard export
+        run: npm run test:preview
+
       - name: Upload installation artifact
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         with:

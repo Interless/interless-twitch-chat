@@ -9,6 +9,7 @@
 - [ ] `npm run typecheck`
 - [ ] `npm test`
 - [ ] `npm run build`
+- [ ] `npm run test:preview`
 - [ ] Manual StreamElements/OBS QA, when integration or visuals changed
 
 ## Risk

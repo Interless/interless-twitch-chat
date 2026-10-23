@@ -1,5 +1,6 @@
 const USERS = [
   { nick: 'captain', displayName: 'Captain', badges: ['broadcaster'] },
+  { nick: 'leadmod', displayName: 'LeadMod', badges: ['lead_moderator'] },
   { nick: 'modbone', displayName: 'ModBone', badges: ['moderator'] },
   { nick: 'violetvip', displayName: 'VioletVIP', badges: ['vip'] },
   { nick: 'subscriber', displayName: 'Subscriber', badges: ['subscriber'] },

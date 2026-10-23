@@ -3,6 +3,7 @@ import type { ChatBadge, ChatRole } from './types';
 /** Twitch roles are intentionally ordered in one place. The first match wins. */
 export const ROLE_PRIORITY: readonly ChatRole[] = [
   'broadcaster',
+  'lead_moderator',
   'moderator',
   'vip',
   'subscriber',
@@ -20,6 +21,7 @@ export function resolveRole(signals: RoleSignals): ChatRole {
   const activeRoles = new Set<ChatRole>(['viewer']);
 
   if (badgeTypes.has('broadcaster')) activeRoles.add('broadcaster');
+  if (badgeTypes.has('lead_moderator')) activeRoles.add('lead_moderator');
   if (badgeTypes.has('moderator') || signals.isModerator) activeRoles.add('moderator');
   if (badgeTypes.has('vip')) activeRoles.add('vip');
   if (badgeTypes.has('subscriber') || signals.isSubscriber) activeRoles.add('subscriber');

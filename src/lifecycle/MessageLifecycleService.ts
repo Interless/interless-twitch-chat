@@ -14,8 +14,9 @@ export class MessageLifecycleService {
 
   public constructor(
     private readonly onStateChange: (messageId: string, state: MessageLifecycleState) => void,
-    private readonly schedule: Schedule = setTimeout,
-    private readonly cancel: Cancel = clearTimeout,
+    private readonly schedule: Schedule = (callback, delayMs) =>
+      globalThis.setTimeout(callback, delayMs),
+    private readonly cancel: Cancel = (handle) => globalThis.clearTimeout(handle),
   ) {}
 
   public sync(messages: ActiveMessage[], config: WidgetConfig, now = Date.now()): void {

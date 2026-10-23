@@ -1,4 +1,4 @@
-import type { ActiveMessage, ChatMessage, PlacementResult } from '../src/domain/types';
+import type { ActiveMessage, ChatMessage } from '../src/domain/types';
 
 export function createChatMessage(overrides: Partial<ChatMessage> = {}): ChatMessage {
   const text = overrides.text ?? 'Hello chat';
@@ -20,22 +20,12 @@ export function createChatMessage(overrides: Partial<ChatMessage> = {}): ChatMes
   };
 }
 
-export function createPlacement(): PlacementResult {
-  return {
-    x: 10,
-    y: 20,
-    rotation: 1,
-    collisionRect: { x: 8, y: 18, width: 260, height: 100 },
-    attempts: 1,
-    usedFallback: false,
-  };
-}
-
 export function createActiveMessage(overrides: Partial<ActiveMessage> = {}): ActiveMessage {
   return {
     message: createChatMessage(),
     lifecycle: 'visible',
-    placement: createPlacement(),
+    side: 'left',
+    characterId: null,
     ...overrides,
   };
 }

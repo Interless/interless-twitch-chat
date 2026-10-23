@@ -2,6 +2,8 @@ import { normalizeConfig } from '../../config/configNormalizer';
 import { createMessageFragments, type EmoteSpan } from '../../domain/messageFragments';
 import { resolveRole } from '../../domain/roleResolver';
 import type { ChatBadge, ChatMessage, NormalizedWidgetEvent } from '../../domain/types';
+import { installCharacterPack } from '../../domain/characterRegistry';
+import { resolveMediaLibraryPack, type MediaLibraryManifest } from '../../domain/mediaLibrary';
 
 type WidgetEventHandler = (event: NormalizedWidgetEvent) => void;
 
@@ -46,22 +48,21 @@ function parseBadge(value: unknown): ChatBadge | null {
 }
 
 function parseBadges(data: Record<string, unknown>, tags: Record<string, unknown>): ChatBadge[] {
-  if (Array.isArray(data.badges)) {
-    return data.badges.flatMap((badge) => {
-      const parsed = parseBadge(badge);
-      return parsed === null ? [] : [parsed];
-    });
+  const badges = Array.isArray(data.badges)
+    ? data.badges.flatMap((badge) => {
+        const parsed = parseBadge(badge);
+        return parsed === null ? [] : [parsed];
+      })
+    : [];
+  // Older widget payloads may omit a new Twitch badge from the image list.
+  const known = new Set(badges.map((badge) => badge.type.toLowerCase()));
+  for (const tag of (stringValue(tags.badges) ?? '').split(',')) {
+    const [type, version] = tag.split('/');
+    if (!type || known.has(type.toLowerCase())) continue;
+    badges.push({ type, version: version ?? '1', url: null, description: type });
+    known.add(type.toLowerCase());
   }
-
-  const badgeTags = stringValue(tags.badges);
-  if (badgeTags === null) return [];
-
-  return badgeTags.split(',').flatMap((badge) => {
-    const [type, version] = badge.split('/');
-    return type === undefined || type === ''
-      ? []
-      : [{ type, version: version ?? '1', url: null, description: type }];
-  });
+  return badges;
 }
 
 function parseEmotes(value: unknown): EmoteSpan[] {
@@ -168,6 +169,10 @@ export class StreamElementsAdapter {
 
   public subscribe(handler: WidgetEventHandler): () => void {
     const onWidgetLoad: EventListener = (event) => {
+      const manifest = (globalThis as { __INTERLESS_MEDIA_LIBRARY__?: MediaLibraryManifest | null })
+        .__INTERLESS_MEDIA_LIBRARY__;
+      if (manifest !== undefined)
+        installCharacterPack(resolveMediaLibraryPack(manifest, detailFrom(event)?.fieldData));
       const normalized = normalizeWidgetLoadEvent(event);
       if (normalized !== null) handler(normalized);
     };
@@ -176,10 +181,30 @@ export class StreamElementsAdapter {
       if (normalized !== null) handler(normalized);
     };
 
+    // Internal control for the offline preview, independent of provider events.
+    const onClear: EventListener = () => handler({ type: 'chat-cleared' });
+    const onPreview: EventListener = (event) => {
+      const detail = detailFrom(event);
+      if (!detail || !Array.isArray(detail.characterIds)) return;
+      if (detail.userId !== undefined && (typeof detail.userId !== 'string' || !detail.userId))
+        return;
+      handler({
+        type: 'preview-characters-selected',
+        characterIds: detail.characterIds
+          .filter((id): id is string => typeof id === 'string')
+          .slice(0, 64),
+        ...(typeof detail.userId === 'string' ? { userId: detail.userId } : {}),
+      });
+    };
+    this.eventTarget.addEventListener('interless:preview-characters', onPreview);
+
+    this.eventTarget.addEventListener('interless:clear-chat', onClear);
     this.eventTarget.addEventListener('onWidgetLoad', onWidgetLoad);
     this.eventTarget.addEventListener('onEventReceived', onEventReceived);
 
     return () => {
+      this.eventTarget.removeEventListener('interless:preview-characters', onPreview);
+      this.eventTarget.removeEventListener('interless:clear-chat', onClear);
       this.eventTarget.removeEventListener('onWidgetLoad', onWidgetLoad);
       this.eventTarget.removeEventListener('onEventReceived', onEventReceived);
     };

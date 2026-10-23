@@ -1,0 +1,1628 @@
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Interless — просмотр чата</title>
+    <style id="interless-widget-css">
+      __INTERLESS_CSS_SLOT__
+    </style>
+    <style>
+      body {
+        background: #272331;
+      }
+      body.light {
+        background: #c6b5a4;
+      }
+      body.checker {
+        background-color: #bcb1c7;
+        background-image: conic-gradient(
+          #766985 25%,
+          transparent 0 50%,
+          #766985 0 75%,
+          transparent 0
+        );
+        background-size: 32px 32px;
+      }
+      .preview-panel .opacity-row {
+        display: grid;
+        grid-template-columns: 1fr 130px 45px;
+        gap: 8px;
+        align-items: center;
+        margin-top: 10px;
+      }
+      .preview-panel input[type='range'] {
+        width: 130px;
+        padding: 0;
+        accent-color: #b77bee;
+      }
+      .preview-panel output {
+        text-align: right;
+      }
+      .preview-panel {
+        position: fixed;
+        top: 16px;
+        right: 16px;
+        z-index: 20;
+        width: min(460px, calc(100% - 24px));
+        max-height: calc(100dvh - 32px);
+        overflow-y: auto;
+        box-sizing: border-box;
+        padding: 14px;
+        border: 1px solid #a775d0;
+        border-radius: 10px;
+        background: #211b2feb;
+        font: 13px system-ui;
+        color: #eee;
+      }
+      .preview-panel p {
+        margin: 0 0 10px;
+      }
+      .preview-row {
+        display: flex;
+        gap: 8px;
+        align-items: center;
+        flex-wrap: wrap;
+      }
+      .preview-panel label {
+        display: flex;
+        gap: 6px;
+        align-items: center;
+      }
+      .preview-panel input,
+      .preview-panel select,
+      .preview-panel textarea {
+        box-sizing: border-box;
+        border: 1px solid #a775d0;
+        border-radius: 6px;
+        padding: 8px;
+        background: #30253f;
+        color: #fff;
+        font: 14px system-ui;
+      }
+      .preview-panel input {
+        width: 140px;
+      }
+      .preview-panel textarea {
+        display: block;
+        width: 100%;
+        min-height: 60px;
+        resize: vertical;
+        margin: 10px 0;
+      }
+      .preview-panel button {
+        border: 1px solid #a775d0;
+        border-radius: 6px;
+        padding: 8px 10px;
+        background: #442565;
+        color: #fff;
+        cursor: pointer;
+      }
+      .preview-panel small {
+        display: block;
+        margin-top: 8px;
+        color: #d4c4df;
+      }
+      .dino-gallery {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
+        margin-top: 10px;
+      }
+      .dino-card {
+        border: 1px solid #75558b;
+        border-radius: 7px;
+        text-align: center;
+        padding: 8px;
+        background: #30253f;
+      }
+      .dino-thumb {
+        position: relative;
+        display: block;
+        overflow: hidden;
+        width: 96px;
+        height: 96px;
+        margin: 0 auto 8px;
+      }
+      .dino-thumb img,
+      .dino-thumb video {
+        position: absolute;
+        max-width: none;
+        width: var(--sprite-width);
+        height: var(--sprite-height);
+        left: var(--sprite-left);
+        top: var(--sprite-top);
+        image-rendering: auto;
+      }
+      .dino-card strong {
+        display: block;
+        font-size: 12px;
+        min-height: 30px;
+      }
+      .dino-card button {
+        margin-top: 4px;
+      }
+      .dino-card form {
+        margin-top: 10px;
+        text-align: left;
+      }
+      .dino-card input {
+        width: 100%;
+        min-width: 0;
+        box-sizing: border-box;
+      }
+      .preview-panel input[type='file'] {
+        width: 100%;
+      }
+      .preview-panel .select-row {
+        margin-top: 10px;
+      }
+      .preview-panel .select-row select {
+        max-width: 270px;
+      }
+      .preview-panel #preset-output {
+        font: 11px monospace;
+        min-height: 90px;
+      }
+      .font-editor {
+        margin: 10px 0 14px;
+      }
+      .preview-panel .font-editor select {
+        flex: 1;
+        min-width: 0;
+      }
+      .preview-panel #font-sample {
+        margin: 12px 0 0;
+        line-height: 1.6;
+        overflow-wrap: anywhere;
+      }
+      .decoration-toggles {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 8px;
+        margin: 12px 0;
+      }
+      .preview-panel .decoration-toggles label {
+        padding: 6px;
+        border: 1px solid #75558b;
+        border-radius: 6px;
+        cursor: pointer;
+      }
+      .preview-panel .decoration-toggles input,
+      .preview-panel input[type='checkbox'] {
+        width: 18px;
+        height: 18px;
+        padding: 0;
+        accent-color: #b77bee;
+      }
+      .decoration-toggles svg {
+        width: 22px;
+        height: 22px;
+        fill: #d7b3f1;
+      }
+      .decoration-toggles label:has(input:checked) {
+        background: #442565;
+      }
+      .palette-editor {
+        margin-top: 12px;
+        border: 1px solid #75558b;
+        border-radius: 6px;
+        padding: 10px;
+      }
+      .palette-editor summary {
+        cursor: pointer;
+        font-weight: 600;
+      }
+      .palette-editor select {
+        width: 100%;
+        margin: 10px 0;
+      }
+      .palette-color-row {
+        display: flex;
+        gap: 8px;
+        align-items: center;
+      }
+      .preview-panel input[type='color'] {
+        width: 60px;
+        height: 38px;
+        padding: 3px;
+        cursor: pointer;
+      }
+      .preview-panel #palette-hex {
+        width: 112px;
+        text-transform: uppercase;
+      }
+      .palette-rgb {
+        display: flex;
+        gap: 12px;
+        margin: 10px 0;
+      }
+      .preview-panel .palette-rgb input {
+        width: 70px;
+      }
+      .preview-panel input[aria-invalid='true'] {
+        border-color: #ff7e97;
+      }
+      @media (max-width: 1000px) {
+        body {
+          display: grid;
+          grid-template-rows: auto minmax(0, 1fr);
+        }
+        #root {
+          grid-row: 2;
+          min-height: 0;
+        }
+        .preview-panel {
+          position: static;
+          grid-row: 1;
+          max-height: 55dvh;
+          width: calc(100% - 24px);
+          margin: 12px;
+          padding: 10px;
+          font-size: 12px;
+        }
+        .preview-panel button {
+          padding: 6px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div id="root"></div>
+    <form id="composer" class="preview-panel">
+      <p><strong>Interless 0.13.0 — локальный просмотр</strong></p>
+      <details class="palette-editor" id="transfer-editor" open>
+        <summary>Скопировать в StreamElements</summary>
+        <small
+          >Настрой чат и нажми название нужной вкладки — её код скопируется. В StreamElements открой
+          ту же вкладку, выдели старый код (Ctrl+A) и вставь новый (Ctrl+V). Передаются всё
+          оформление и только выбранный шрифт. Динозаврики загружаются отдельно в медиатеку
+          StreamElements.</small
+        >
+        <div class="preview-row" style="margin-top: 10px">
+          <button type="button" id="copy-html" data-copy-tab="HTML">Скопировать HTML</button>
+          <button type="button" id="copy-css" data-copy-tab="CSS">Скопировать CSS</button>
+          <button type="button" id="copy-js" data-copy-tab="JS">Скопировать JS</button>
+          <button type="button" id="copy-fields" data-copy-tab="FIELDS">Скопировать FIELDS</button>
+        </div>
+        <small id="widget-export-status" role="status" aria-live="polite"
+          >Скопируй все четыре вкладки. Затем в настройках Custom Widget открой «Динозаврики —
+          медиатека» и загрузи файлы для каждой команды. Анимации в JS не встраиваются.</small
+        >
+        <div id="copy-fallback" hidden>
+          <label id="copy-code-label" for="copy-code">Код для ручного копирования</label>
+          <textarea
+            id="copy-code"
+            readonly
+            spellcheck="false"
+            aria-labelledby="copy-code-label"
+          ></textarea>
+          <button type="button" id="copy-select">Выделить код для Ctrl+C</button>
+        </div>
+        <div class="preview-row" style="margin-top: 10px">
+          <button type="button" id="project-save">Сохранить проект</button>
+          <label
+            >Открыть проект <input type="file" id="project-file" accept=".json,application/json"
+          /></label>
+        </div>
+        <small
+          >«Сохранить проект» сохраняет JSON для повторного редактирования здесь — вместе с
+          настройками и анимациями.</small
+        >
+        <details>
+          <summary>Быстрое подключение</summary>
+          <ol>
+            <li>Настрой оформление и загрузи своих динозавриков.</li>
+            <li>
+              В StreamElements открой Overlay → Static / Custom → Custom Widget → Open Editor.
+            </li>
+            <li>
+              По очереди нажми «Скопировать HTML», «Скопировать CSS», «Скопировать JS», «Скопировать
+              FIELDS» и вставь каждый код в одноимённую вкладку.
+            </li>
+            <li>
+              Закрой Open Editor. В настройках Custom Widget открой «Динозаврики — медиатека». Для
+              каждой команды нажми выбор видео или картинки → Upload → выбери тот же файл, что в
+              превью → Submit. Сохрани Overlay кнопкой Save.
+            </li>
+            <li>
+              Скопируй URL Overlay в OBS → Источники → Браузер. Размер источника — как у Overlay.
+            </li>
+          </ol>
+          <small
+            >Оформление настраивается здесь, файлы для эфира хранятся в StreamElements. После
+            изменения оформления скопируй четыре вкладки заново. Вкладку DATA не очищай — там
+            сохраняется выбор медиа.</small
+          >
+        </details>
+        <details>
+          <summary>Дополнительно: JSON пресета</summary>
+          <small
+            >Дополнительно: компактный JSON только с настройками (без загруженных анимаций).</small
+          >
+          <div class="preview-row" style="margin-top: 10px">
+            <button type="button" id="preset-export">Подготовить код</button
+            ><button type="button" id="preset-copy">Скопировать код</button
+            ><button type="button" id="preset-download">Скачать JSON</button>
+          </div>
+          <textarea
+            id="preset-output"
+            aria-label="Код пресета"
+            placeholder="Здесь будет код настроек. Сюда же можно вставить сохранённый пресет для импорта."
+            spellcheck="false"
+          ></textarea>
+          <div class="preview-row">
+            <button type="button" id="preset-import">Применить в превью</button
+            ><label
+              >Открыть JSON <input type="file" id="preset-file" accept=".json,application/json"
+            /></label>
+          </div>
+          <small id="transfer-status" role="status"
+            >Передаются настройки оформления, движения, значков и расположения. Тестовые сообщения и
+            личный выбор зрителей в пресет не входят.</small
+          >
+        </details>
+      </details>
+      <div class="font-editor">
+        <label for="font-family"
+          >Шрифт
+          <select id="font-family">
+            <optgroup label="Пиксельные">
+              <option value="Press Start 2P">Press Start 2P</option>
+              <option value="Tiny5">Tiny5</option>
+            </optgroup>
+            <optgroup label="Обычные">
+              <option value="PT Sans">PT Sans</option>
+              <option value="Rubik">Rubik</option>
+              <option value="Comfortaa">Comfortaa</option>
+            </optgroup>
+            <optgroup label="С засечками"><option value="Lora">Lora</option></optgroup>
+            <optgroup label="Рукописные">
+              <option value="Marck Script">Marck Script</option>
+              <option value="Bad Script">Bad Script</option>
+              <option value="Caveat">Caveat</option>
+              <option value="Neucha">Neucha</option>
+            </optgroup>
+          </select></label
+        >
+        <label class="opacity-row" for="font-size"
+          ><span>Размер шрифта</span
+          ><input type="range" id="font-size" min="10" max="40" value="16" /><output
+            id="font-size-value"
+            for="font-size"
+            >16 px</output
+          ></label
+        >
+        <p id="font-sample" lang="ru">Привет, чат! Ёжик, щука и 123.</p>
+        <small>10 готовых шрифтов с кириллицей, работают без интернета.</small>
+      </div>
+      <p>
+        Карточки: 1 слева → 2 справа → 3 слева → 4 справа. Весь чат остаётся одним блоком слева.
+      </p>
+      <div class="preview-row">
+        <label
+          >Ник
+          <input id="author" value="TestViewer" required maxlength="25" pattern="[A-Za-z0-9_]+"
+        /></label>
+        <label
+          >Роль
+          <select id="role">
+            <option value="">Зритель</option>
+            <option value="broadcaster">Стример</option>
+            <option value="moderator">Модератор</option>
+            <option value="lead_moderator">Главный модератор</option>
+            <option value="subscriber">Подписчик</option>
+            <option value="vip">VIP</option>
+          </select></label
+        >
+      </div>
+      <div class="preview-row" style="margin-top: 10px">
+        <label
+          >Подложка
+          <select id="preset">
+            <option value="reference">Как на примере · 100%</option>
+            <option value="soft">Как на примере · 80%</option>
+            <option value="light">Светлая · 100%</option>
+            <option value="lightGlass">Светлая · 70%</option>
+            <option value="dark">Тёмная · 100%</option>
+            <option value="darkGlass">Тёмная · 70%</option>
+            <option value="transparent">Без подложек · 0%</option>
+            <option value="custom" disabled>Свои значения</option>
+          </select></label
+        >
+      </div>
+      <label class="opacity-row" for="bubble-opacity"
+        ><span>Непрозрачность подложки</span
+        ><input type="range" id="bubble-opacity" min="0" max="100" value="100" /><output
+          id="bubble-opacity-value"
+          for="bubble-opacity"
+          >100%</output
+        ></label
+      >
+      <label class="opacity-row" for="header-opacity"
+        ><span>Непрозрачность плашки имени</span
+        ><input type="range" id="header-opacity" min="0" max="100" value="100" /><output
+          id="header-opacity-value"
+          for="header-opacity"
+          >100%</output
+        ></label
+      >
+      <div class="preview-row" style="margin-top: 10px">
+        <label
+          >Движение
+          <select id="idle-motion">
+            <option value="pixel">Пиксельное покачивание</option>
+            <option value="float">Плавно вверх-вниз</option>
+            <option value="chaotic">Хаотичные сдвиги</option>
+            <option value="off">Выключено</option>
+          </select></label
+        >
+      </div>
+      <label class="opacity-row" for="idle-frequency"
+        ><span>Частота движений</span
+        ><input type="range" id="idle-frequency" min="0" max="100" value="20" /><output
+          id="idle-frequency-value"
+          for="idle-frequency"
+          >20%</output
+        ></label
+      >
+      <label class="opacity-row" for="idle-distance"
+        ><span>Размах движения</span
+        ><input type="range" id="idle-distance" min="0" max="9" value="3" /><output
+          id="idle-distance-value"
+          for="idle-distance"
+          >3 px</output
+        ></label
+      >
+      <details class="palette-editor" id="layout-editor">
+        <summary>Размеры и расположение чата</summary>
+        <label class="opacity-row" for="chat-scale"
+          ><span>Общий масштаб чата</span
+          ><input type="range" id="chat-scale" min="25" max="200" step="5" value="100" /><output
+            id="chat-scale-value"
+            >100%</output
+          ></label
+        >
+        <small
+          >Масштабирует рамки, динозавров, текст и значки вместе. 100% — исходный размер. Такой же
+          ползунок будет в настройках StreamElements. Отступы от краёв сохраняются.
+        </small>
+        <label class="opacity-row" for="character-size"
+          ><span>Размер динозавриков</span
+          ><input type="range" id="character-size" min="64" max="280" value="172" /><output
+            id="character-size-value"
+            >172</output
+          ></label
+        ><label class="opacity-row" for="min-width"
+          ><span>Мин. ширина плашки</span
+          ><input type="range" id="min-width" min="100" max="600" value="210" /><output
+            id="min-width-value"
+            >210</output
+          ></label
+        ><label class="opacity-row" for="max-width"
+          ><span>Макс. ширина плашки</span
+          ><input type="range" id="max-width" min="180" max="900" value="260" /><output
+            id="max-width-value"
+            >260</output
+          ></label
+        ><label class="opacity-row" for="message-gap"
+          ><span>Расстояние между сообщениями</span
+          ><input type="range" id="message-gap" min="0" max="150" value="30" /><output
+            id="message-gap-value"
+            >30</output
+          ></label
+        ><label class="opacity-row" for="horizontal-offset"
+          ><span>Отступ по горизонтали</span
+          ><input type="range" id="horizontal-offset" min="0" max="600" value="32" /><output
+            id="horizontal-offset-value"
+            >32</output
+          ></label
+        ><label class="opacity-row" for="bottom-offset"
+          ><span>Отступ снизу</span
+          ><input type="range" id="bottom-offset" min="0" max="600" value="32" /><output
+            id="bottom-offset-value"
+            >32</output
+          ></label
+        ><label class="opacity-row" for="display-time"
+          ><span>Время сообщения в эфире</span
+          ><input type="range" id="display-time" min="2" max="120" value="12" /><output
+            id="display-time-value"
+            >12</output
+          ></label
+        ><label class="opacity-row" for="max-messages"
+          ><span>Максимум сообщений</span
+          ><input type="range" id="max-messages" min="1" max="30" value="8" /><output
+            id="max-messages-value"
+            >8</output
+          ></label
+        >
+        <label class="select-row"
+          >Привязка блока
+          <select id="chat-alignment">
+            <option value="left">Слева</option>
+            <option value="center">По центру</option>
+            <option value="right">Справа</option>
+          </select></label
+        >
+        <label class="select-row"
+          >Сторона персонажа
+          <select id="character-side">
+            <option value="alternating">Чередовать слева / справа</option>
+            <option value="left">Всегда слева</option>
+            <option value="right">Всегда справа</option>
+          </select></label
+        >
+        <label style="margin-top: 10px"
+          ><input type="checkbox" id="preview-pinned" checked /> Держать сообщения в превью
+          дольше</label
+        >
+        <small
+          >Закрепление продлевает просмотр до 120 секунд только здесь. В скопированный код попадёт
+          выбранное время сообщения в эфире.</small
+        >
+      </details>
+      <details class="palette-editor" id="dino-editor">
+        <summary>Динозаврики — команды и выбор</summary>
+        <div class="preview-row" style="margin-top: 10px">
+          <button type="button" id="choose-dino-folder">Выбрать папку с динозавриками</button
+          ><button type="button" id="choose-dino-files">Выбрать файлы</button>
+        </div>
+        <input type="file" id="dino-folder" webkitdirectory multiple hidden />
+        <input
+          type="file"
+          id="dino-files"
+          accept=".webm,.mp4,.gif,.webp,.png,.apng"
+          multiple
+          hidden
+        />
+        <div class="preview-row" style="margin-top: 10px">
+          <button type="button" id="dino-pack-export">К кнопкам копирования в StreamElements</button
+          ><button type="button" id="dino-pack-reset">Очистить загруженных</button>
+        </div>
+        <small id="dino-pack-status" role="status"
+          >trex.webm → !trex. Выбранная папка заменяет предыдущий набор. Кириллица
+          транслитерируется.</small
+        >
+        <small
+          >Команду можно изменить в карточке ниже: введи название и нажми «Изменить команду».
+          Допускаются латиница, кириллица, цифры, _ и -, до 32 знаков; первый — буква. В
+          StreamElements команда также редактируется рядом с выбором файла. После переименования
+          старая команда не сохраняется как алиас.</small
+        >
+        <small
+          >Папка читается при выборе. Для сохранения загруженных анимаций используй «Сохранить
+          проект». После изменения файлов выбери папку повторно. До 50 файлов, 16 МБ на файл, 64 МБ
+          всего. Это файлы для локального просмотра. После копирования кода загрузи те же файлы в
+          разделе «Динозаврики — медиатека» в StreamElements: сервер и ручное копирование ссылок не
+          нужны.</small
+        >
+
+        <small
+          >Нажми команду — персонаж сразу заменится у показанных сообщений ника из поля выше. Если
+          таких сообщений ещё нет, появится тестовое. В Twitch команда меняет только следующие
+          сообщения автора.</small
+        >
+        <button type="button" id="random-dinosaurs" style="margin-top: 10px">
+          Назначить случайных динозавриков
+        </button>
+        <small
+          >Меняет персонажей у всех авторов в превью. У одного автора — один персонаж; повторные
+          нажатия позволяют просмотреть каталог.</small
+        >
+        <div class="dino-gallery" id="dino-gallery"></div>
+        <small id="bot-help"></small>
+        <small
+          >!dino, !ichat и !Interless_chat — список. В Twitch отвечает реальный бот StreamElements
+          после настройки Custom commands бота; здесь показан текст списка команд для ответа.</small
+        >
+      </details>
+      <details class="palette-editor" id="decoration-editor" open>
+        <summary>Фоновые значки — палеонтология</summary>
+        <label style="margin-top: 10px"
+          ><input type="checkbox" id="decorations-enabled" checked /> Включить фоновые значки</label
+        >
+        <div class="decoration-toggles">
+          <label
+            ><input type="checkbox" id="decoration-bone" checked /><svg
+              viewBox="0 0 24 24"
+              aria-hidden="true"
+              shape-rendering="crispEdges"
+            >
+              <path
+                d="M8 10h8l2-3h3l2 2v3l-2 2 2 2v3l-2 2h-3l-2-3H8l-2 3H3l-2-2v-3l2-2-2-2V9l2-2h3z"
+                fill-rule="evenodd"
+              /></svg
+            >Косточка</label
+          ><label
+            ><input type="checkbox" id="decoration-book" checked /><svg
+              viewBox="0 0 24 24"
+              aria-hidden="true"
+              shape-rendering="crispEdges"
+            >
+              <path
+                d="M2 4h7l3 2 3-2h7v15h-7l-3 2-3-2H2zm2 2v11h5l2 1V8L8 6zm9 2v10l2-1h5V6h-5zM6 9h3v2H6zm9 0h3v2h-3zM6 13h3v2H6zm9 0h3v2h-3z"
+                fill-rule="evenodd"
+              /></svg
+            >Книга</label
+          ><label
+            ><input type="checkbox" id="decoration-ammonite" checked /><svg
+              viewBox="0 0 24 24"
+              aria-hidden="true"
+              shape-rendering="crispEdges"
+            >
+              <path
+                d="M7 2h10v2h3v3h2v10h-2v3h-3v2H7v-2H4v-3H2V7h2V4h3zm1 3v2H6v3H5v5h2v3h3v1h6v-2h3v-6h-2V8h-6v2H9v5h5v-3h-3v-1h5v5h-2v1H9v-2H7v-5h2V8h3V6h5V5zm9 15h4v2h-4z"
+                fill-rule="evenodd"
+              /></svg
+            >Аммонит</label
+          ><label
+            ><input type="checkbox" id="decoration-hammer" checked /><svg
+              viewBox="0 0 24 24"
+              aria-hidden="true"
+              shape-rendering="crispEdges"
+            >
+              <path
+                d="M2 3h8v1h6l4 2 3 4v2h-2l-3-3-4-1h-2v2h-1v7h1v5H7v-5h1v-7H2zM4 5h4v3H4zM8 18h3v1H8zM8 20h3v1H8z"
+                fill-rule="evenodd"
+              /></svg
+            >Геологический молоток</label
+          ><label
+            ><input type="checkbox" id="decoration-footprint" checked /><svg
+              viewBox="0 0 24 24"
+              aria-hidden="true"
+              shape-rendering="crispEdges"
+            >
+              <path
+                d="M11 1h2v2h1v7h2V8h1V6h2V4h3v3h-1v2h-2v3h-2v2h-2v4h-1v3h-2v2h-2v-2H9v-3H8v-4H6v-2H4V9H2V4h3v2h2v2h1v2h3z"
+                fill-rule="evenodd"
+              /></svg
+            >След динозавра</label
+          ><label
+            ><input type="checkbox" id="decoration-skull" checked /><svg
+              viewBox="0 0 24 24"
+              aria-hidden="true"
+              shape-rendering="crispEdges"
+            >
+              <path
+                d="M5 3h11v2h4v3h2v7h-3v2h-2v4H5v-3H3v-4H1V8h3V5h1zM7 7h5v5H7zM16 9h3v3h-3zM7 16v3h2v-3zm4 0v3h2v-3zm4 0v3h1v-3z"
+                fill-rule="evenodd"
+              /></svg
+            >Череп динозавра</label
+          ><label
+            ><input type="checkbox" id="decoration-trilobite" checked /><svg
+              viewBox="0 0 24 24"
+              aria-hidden="true"
+              shape-rendering="crispEdges"
+            >
+              <path
+                d="M8 2h8v2h3v3h2v10h-2v3h-3v2H8v-2H5v-3H3V7h2V4h3zM7 5h2v2H7zm8 0h2v2h-2zM5 9h5v2H5zm9 0h5v2h-5zM5 13h5v2H5zm9 0h5v2h-5zM7 17h3v2H7zm7 0h3v2h-3z"
+                fill-rule="evenodd"
+              /></svg
+            >Трилобит</label
+          ><label
+            ><input type="checkbox" id="decoration-fern" checked /><svg
+              viewBox="0 0 24 24"
+              aria-hidden="true"
+              shape-rendering="crispEdges"
+            >
+              <path
+                d="M11 2h2v20h-2zM11 8H8V6H5V3h3v2h3zm2-2V3h6v2h-2v1zM11 13H8v-2H4V7h3v2h4zm2-1V9h4V7h4v4h-4v1zM11 18H7v-2H3v-4h3v2h5zm2-1v-3h5v-2h4v4h-5v1z"
+                fill-rule="evenodd"
+              /></svg
+            >Папоротник</label
+          ><label
+            ><input type="checkbox" id="decoration-brush" checked /><svg
+              viewBox="0 0 24 24"
+              aria-hidden="true"
+              shape-rendering="crispEdges"
+            >
+              <path
+                d="M10 1h4v11h3v3h2v8H5v-8h2v-3h3zM8 17h1v5H8zm3 0h2v5h-2zm4 0h1v5h-1zM9 13h6v1H9z"
+                fill-rule="evenodd"
+              /></svg
+            >Кисточка</label
+          ><label
+            ><input type="checkbox" id="decoration-flask" checked /><svg
+              viewBox="0 0 24 24"
+              aria-hidden="true"
+              shape-rendering="crispEdges"
+            >
+              <path
+                d="M8 1h8v3h-1v5l6 9v4H3v-4l6-9V4H8zM11 4v6l-5 8v2h12v-2l-5-8V4zM8 16h8l2 3H6z"
+                fill-rule="evenodd"
+              /></svg
+            >Колба</label
+          ><label
+            ><input type="checkbox" id="decoration-beer" checked /><svg
+              viewBox="0 0 24 24"
+              aria-hidden="true"
+              shape-rendering="crispEdges"
+            >
+              <path
+                d="M9 1h6v3h-1v5l3 3v10H7V12l3-3V4H9zM9 14h6v5H9zM11 5h1v4h-1z"
+                fill-rule="evenodd"
+              /></svg
+            >Бутылка пива</label
+          >
+        </div>
+        <label class="opacity-row" for="decoration-density"
+          ><span>Плотность</span
+          ><input type="range" id="decoration-density" min="0" max="100" value="25" /><output
+            id="decoration-density-value"
+            >25%</output
+          ></label
+        >
+        <label class="opacity-row" for="decoration-chance"
+          ><span>Сообщений с декором</span
+          ><input type="range" id="decoration-chance" min="0" max="100" value="100" /><output
+            id="decoration-chance-value"
+            >100%</output
+          ></label
+        >
+        <label class="opacity-row" for="decoration-frequency"
+          ><span>Частота смены</span
+          ><input type="range" id="decoration-frequency" min="0" max="100" value="20" /><output
+            id="decoration-frequency-value"
+            >20%</output
+          ></label
+        >
+        <label class="opacity-row" for="decoration-opacity"
+          ><span>Видимость значков</span
+          ><input type="range" id="decoration-opacity" min="0" max="70" value="18" /><output
+            id="decoration-opacity-value"
+            >18%</output
+          ></label
+        >
+        <small
+          >Больше плотность — больше значков, пока хватает места. Короткая плашка вмещает меньше.
+          Все переключатели можно сочетать.</small
+        >
+        <small
+          >Частота смены: 0 — статичный рисунок, 100 — новый каждые 3 секунды. Плотность 0 или
+          выключенные значки убирают декор.</small
+        >
+        <small id="decoration-status" role="status"
+          >Случайные позиции и углы, без пересечений. Цвет — в палитре, пункт «Фоновые
+          значки».</small
+        >
+      </details>
+      <details class="palette-editor" id="palette-editor" open>
+        <summary>Палитра RGB — цвета элементов</summary>
+        <label for="palette-element">Элемент</label>
+        <select id="palette-element" aria-label="Элемент для перекраски">
+          <option value="textColor">Текст сообщения</option>
+          <option value="nameColor">Текст ника</option>
+          <option value="headerColor">Верхняя плашка</option>
+          <option value="bubbleColor">Нижняя плашка</option>
+          <option value="borderColor">Контур плашки</option>
+          <option value="frameColor">Рамка — основной цвет</option>
+          <option value="frameShadowColor">Рамка — тёмный контур</option>
+          <option value="boneColor">Косточки</option>
+          <option value="boneHighlightColor">Косточки — блики</option>
+          <option value="boneShadeColor">Косточки — тени</option>
+          <option value="boneOutlineColor">Косточки — контур</option>
+          <option value="accentColor">Узор верхней плашки</option>
+          <option value="accentShadeColor">Мелкий узор верхней плашки</option>
+          <option value="dividerColor">Разделитель плашек</option>
+          <option value="badgeColor">Символ значка роли</option>
+          <option value="badgeBackground">Фон значка роли</option>
+          <option value="badgeBorder">Контур значка роли</option>
+          <option value="shadowColor">Тень плашки</option>
+          <option value="decorationColor">Фоновые значки</option>
+        </select>
+        <div class="palette-color-row">
+          <input id="palette-color" type="color" value="#54218b" aria-label="Выбрать цвет" />
+          <label
+            >HEX
+            <input
+              id="palette-hex"
+              value="#54218b"
+              maxlength="7"
+              spellcheck="false"
+              aria-label="Цвет HEX"
+          /></label>
+        </div>
+        <div class="palette-rgb">
+          <label
+            >R
+            <input id="palette-r" type="number" min="0" max="255" step="1" aria-label="R" /></label
+          ><label
+            >G
+            <input id="palette-g" type="number" min="0" max="255" step="1" aria-label="G" /></label
+          ><label
+            >B <input id="palette-b" type="number" min="0" max="255" step="1" aria-label="B"
+          /></label>
+        </div>
+        <div class="preview-row">
+          <button type="button" id="palette-reset-element">Сбросить этот цвет</button
+          ><button type="button" id="palette-reset-all">Сбросить палитру</button>
+        </div>
+        <small id="palette-status" role="status"
+          >Выбери элемент и задай любой цвет. Изменения сразу видны в чате.</small
+        >
+        <small
+          >Меняются цвета всех ролей для выбранного элемента. Анимации динозавриков и изображения
+          Twitch остаются в исходных цветах.</small
+        >
+      </details>
+      <textarea
+        id="message"
+        placeholder="Напиши сообщение или команду загруженного персонажа"
+        aria-label="Текст сообщения"
+        required
+        maxlength="2000"
+      ></textarea>
+      <div class="preview-row">
+        <button type="submit">Отправить</button><button type="button" id="send">Пример</button
+        ><button type="button" id="sequence">Показать 1–4</button
+        ><button type="button" id="badges">Значки ролей</button
+        ><button type="button" id="clear">Очистить</button
+        ><button type="button" id="background">Фон</button>
+      </div>
+      <small id="status" role="status"
+        >Enter — отправить · Shift+Enter — новая строка. Загрузи своих динозавриков в разделе
+        выше.</small
+      >
+    </form>
+    <script id="interless-runtime">
+      __INTERLESS_BUNDLE_SLOT__;
+    </script>
+    <script>
+      const samples = [
+        ['Gluepapaya', '', 'привет чат. как дела?'],
+        [
+          'Interless',
+          'broadcaster',
+          'я настрочу полотно чтобы проверить как это смотрится, много переносов или это норм? мне нрав перс',
+        ],
+        ['savva', 'subscriber', 'киси киси мяу мяу'],
+        ['VIP', 'vip', 'VIP с алмазиком'],
+        ['LeadMod', 'lead_moderator', 'Главный модератор с молотком'],
+        [
+          'Moderator',
+          'moderator',
+          'Проверяем русский текст, длинные сообщения и анимацию динозаврика.',
+        ],
+      ];
+      let counter = 0;
+      let sampleIndex = 0;
+
+      const presets = {
+        reference: { colorScheme: 'roles', bubbleOpacity: 100, headerOpacity: 100 },
+        soft: { colorScheme: 'roles', bubbleOpacity: 80, headerOpacity: 100 },
+        light: { colorScheme: 'light', bubbleOpacity: 100, headerOpacity: 100 },
+        lightGlass: { colorScheme: 'light', bubbleOpacity: 70, headerOpacity: 100 },
+        dark: { colorScheme: 'dark', bubbleOpacity: 100, headerOpacity: 100 },
+        darkGlass: { colorScheme: 'dark', bubbleOpacity: 70, headerOpacity: 100 },
+        transparent: { colorScheme: 'dark', bubbleOpacity: 0, headerOpacity: 0 },
+      };
+      const defaultFields = {
+        displayTimeSeconds: 12,
+        maxMessages: 8,
+        minWidth: 210,
+        maxWidth: 260,
+        fontFamily: 'Press Start 2P',
+        fontSize: 16,
+        lineHeight: 1.5,
+        padding: 14,
+        borderRadius: 8,
+        borderWidth: 2,
+        showBadges: true,
+        showUserName: true,
+        hideCommands: true,
+        ignoredUsers: '',
+        chatAlignment: 'left',
+        chatScale: 100,
+        horizontalOffset: 32,
+        bottomOffset: 32,
+        messageGap: 30,
+        enterAnimation: 'pop',
+        enterDurationMs: 320,
+        exitAnimation: 'fade',
+        exitDurationMs: 350,
+        idleIntensity: 1,
+        broadcasterThemeEnabled: true,
+        broadcasterThemeBubbleColor: '#eee4f8',
+        broadcasterThemeTextColor: '#54218b',
+        broadcasterThemeNameColor: '#fff5ff',
+        broadcasterThemeBorderColor: '#9956cf',
+        broadcasterThemeShadow: '0 2px 0 #5e238b',
+        broadcasterThemeCharacter: '',
+        broadcasterThemeDecoration: '',
+        broadcasterThemeEffects: true,
+        moderatorThemeEnabled: true,
+        moderatorThemeBubbleColor: '#eee4f8',
+        moderatorThemeTextColor: '#54218b',
+        moderatorThemeNameColor: '#fff5ff',
+        moderatorThemeBorderColor: '#9956cf',
+        moderatorThemeShadow: '0 2px 0 #5e238b',
+        moderatorThemeCharacter: '',
+        moderatorThemeDecoration: '',
+        moderatorThemeEffects: true,
+        vipThemeEnabled: true,
+        vipThemeBubbleColor: '#eee4f8',
+        vipThemeTextColor: '#54218b',
+        vipThemeNameColor: '#fff5ff',
+        vipThemeBorderColor: '#9956cf',
+        vipThemeShadow: '0 2px 0 #5e238b',
+        vipThemeCharacter: '',
+        vipThemeDecoration: '',
+        vipThemeEffects: true,
+        subscriberThemeEnabled: true,
+        subscriberThemeBubbleColor: '#4b2678',
+        subscriberThemeTextColor: '#e5d3f7',
+        subscriberThemeNameColor: '#fff5ff',
+        subscriberThemeBorderColor: '#9956cf',
+        subscriberThemeShadow: '0 2px 0 #5e238b',
+        subscriberThemeCharacter: '',
+        subscriberThemeDecoration: '',
+        subscriberThemeEffects: true,
+        viewerThemeEnabled: true,
+        viewerThemeBubbleColor: '#eee4f8',
+        viewerThemeTextColor: '#54218b',
+        viewerThemeNameColor: '#fff5ff',
+        viewerThemeBorderColor: '#9956cf',
+        viewerThemeShadow: '0 2px 0 #5e238b',
+        viewerThemeCharacter: '',
+        viewerThemeDecoration: '',
+        viewerThemeEffects: true,
+        characterSide: 'alternating',
+        characterSize: 172,
+        broadcasterThemeHeaderColor: '#512080',
+        moderatorThemeHeaderColor: '#512080',
+        vipThemeHeaderColor: '#512080',
+        subscriberThemeHeaderColor: '#4b2678',
+        viewerThemeHeaderColor: '#512080',
+        dinosaurCatalog: '{}',
+        userDinosaurs: '{}',
+        lead_moderatorThemeEnabled: true,
+        lead_moderatorThemeBubbleColor: '#4b2678',
+        lead_moderatorThemeTextColor: '#e5d3f7',
+        lead_moderatorThemeNameColor: '#fff5ff',
+        lead_moderatorThemeBorderColor: '#9956cf',
+        lead_moderatorThemeShadow: '0 2px 0 #5e238b',
+        lead_moderatorThemeCharacter: '',
+        lead_moderatorThemeDecoration: '',
+        lead_moderatorThemeEffects: true,
+        lead_moderatorThemeHeaderColor: '#4b2678',
+        colorScheme: 'roles',
+        bubbleOpacity: 100,
+        headerOpacity: 100,
+        idleMotion: 'pixel',
+        idleFrequency: 20,
+      };
+      const previewFields = {
+        ...defaultFields,
+        displayTimeSeconds: 12,
+        maxMessages: 8,
+        idleMotion: 'pixel',
+        idleFrequency: 20,
+        idleIntensity: 1,
+        fontFamily: 'Press Start 2P',
+        fontSize: 16,
+        ...presets.reference,
+      };
+      function applyAppearance() {
+        window.dispatchEvent(new Event('interless:preview-settings-changed'));
+        syncPaletteEditor();
+        syncFontEditor();
+        syncDecorationEditor();
+        syncLayoutEditor();
+        window.dispatchEvent(
+          new CustomEvent('onWidgetLoad', {
+            detail: {
+              fieldData: {
+                ...previewFields,
+                displayTimeSeconds: document.getElementById('preview-pinned').checked
+                  ? 120
+                  : previewFields.displayTimeSeconds,
+              },
+            },
+          }),
+        );
+        try {
+          localStorage.setItem(
+            'interless-preview-settings-v1',
+            window.InterlessChat.encodePreset(previewFields),
+          );
+        } catch {
+          /* Storage is optional. */
+        }
+        for (const [id, key] of [
+          ['bubble-opacity', 'bubbleOpacity'],
+          ['header-opacity', 'headerOpacity'],
+        ]) {
+          document.getElementById(id).value = previewFields[key];
+          document.getElementById(id + '-value').textContent = previewFields[key] + '%';
+        }
+      }
+      document.getElementById('preset').onchange = (event) => {
+        const preset = presets[event.target.value];
+        if (!preset) return;
+        Object.assign(previewFields, preset);
+        applyAppearance();
+      };
+      for (const [id, key] of [
+        ['bubble-opacity', 'bubbleOpacity'],
+        ['header-opacity', 'headerOpacity'],
+      ]) {
+        document.getElementById(id).oninput = (event) => {
+          previewFields[key] = Number(event.target.value);
+          document.getElementById('preset').value = 'custom';
+          applyAppearance();
+        };
+      }
+      document.getElementById('idle-motion').onchange = (event) => {
+        previewFields.idleMotion = event.target.value;
+        applyAppearance();
+      };
+      document.getElementById('idle-frequency').oninput = (event) => {
+        previewFields.idleFrequency = Number(event.target.value);
+        document.getElementById('idle-frequency-value').textContent = event.target.value + '%';
+        applyAppearance();
+      };
+      document.getElementById('idle-distance').oninput = (event) => {
+        previewFields.idleIntensity = Number(event.target.value) / 3;
+        document.getElementById('idle-distance-value').textContent = event.target.value + ' px';
+        applyAppearance();
+      };
+      const layoutControls = [
+        ['chat-scale', 'chatScale'],
+        ['character-size', 'characterSize'],
+        ['min-width', 'minWidth'],
+        ['max-width', 'maxWidth'],
+        ['message-gap', 'messageGap'],
+        ['horizontal-offset', 'horizontalOffset'],
+        ['bottom-offset', 'bottomOffset'],
+        ['display-time', 'displayTimeSeconds'],
+        ['max-messages', 'maxMessages'],
+      ];
+      function syncLayoutEditor() {
+        for (const [id, key] of layoutControls) {
+          document.getElementById(id).value = previewFields[key];
+          document.getElementById(id + '-value').textContent =
+            previewFields[key] +
+            (id === 'chat-scale'
+              ? '%'
+              : id === 'display-time'
+                ? ' с'
+                : id === 'max-messages'
+                  ? ''
+                  : ' px');
+        }
+        document.getElementById('chat-alignment').value = previewFields.chatAlignment;
+        document.getElementById('character-side').value = previewFields.characterSide;
+        document.getElementById('idle-motion').value = previewFields.idleMotion;
+        document.getElementById('idle-frequency').value = previewFields.idleFrequency;
+        document.getElementById('idle-frequency-value').textContent =
+          previewFields.idleFrequency + '%';
+        document.getElementById('idle-distance').value = previewFields.idleIntensity * 3;
+        document.getElementById('idle-distance-value').textContent =
+          previewFields.idleIntensity * 3 + ' px';
+      }
+      for (const [id, key] of layoutControls)
+        document.getElementById(id).oninput = (event) => {
+          previewFields[key] = Number(event.target.value);
+          if (key === 'minWidth' && previewFields.minWidth > previewFields.maxWidth)
+            previewFields.maxWidth = previewFields.minWidth;
+          if (key === 'maxWidth' && previewFields.maxWidth < previewFields.minWidth)
+            previewFields.minWidth = previewFields.maxWidth;
+          applyAppearance();
+        };
+      for (const [id, key] of [
+        ['chat-alignment', 'chatAlignment'],
+        ['character-side', 'characterSide'],
+      ])
+        document.getElementById(id).onchange = (event) => {
+          previewFields[key] = event.target.value;
+          applyAppearance();
+        };
+      document.getElementById('preview-pinned').onchange = applyAppearance;
+      const decorationIcons = {
+        bone: {
+          label: 'Косточка',
+          path: 'M8 10h8l2-3h3l2 2v3l-2 2 2 2v3l-2 2h-3l-2-3H8l-2 3H3l-2-2v-3l2-2-2-2V9l2-2h3z',
+        },
+        book: {
+          label: 'Книга',
+          path: 'M2 4h7l3 2 3-2h7v15h-7l-3 2-3-2H2zm2 2v11h5l2 1V8L8 6zm9 2v10l2-1h5V6h-5zM6 9h3v2H6zm9 0h3v2h-3zM6 13h3v2H6zm9 0h3v2h-3z',
+        },
+        ammonite: {
+          label: 'Аммонит',
+          path: 'M7 2h10v2h3v3h2v10h-2v3h-3v2H7v-2H4v-3H2V7h2V4h3zm1 3v2H6v3H5v5h2v3h3v1h6v-2h3v-6h-2V8h-6v2H9v5h5v-3h-3v-1h5v5h-2v1H9v-2H7v-5h2V8h3V6h5V5zm9 15h4v2h-4z',
+        },
+        hammer: {
+          label: 'Геологический молоток',
+          path: 'M2 3h8v1h6l4 2 3 4v2h-2l-3-3-4-1h-2v2h-1v7h1v5H7v-5h1v-7H2zM4 5h4v3H4zM8 18h3v1H8zM8 20h3v1H8z',
+        },
+        footprint: {
+          label: 'След динозавра',
+          path: 'M11 1h2v2h1v7h2V8h1V6h2V4h3v3h-1v2h-2v3h-2v2h-2v4h-1v3h-2v2h-2v-2H9v-3H8v-4H6v-2H4V9H2V4h3v2h2v2h1v2h3z',
+        },
+        skull: {
+          label: 'Череп динозавра',
+          path: 'M5 3h11v2h4v3h2v7h-3v2h-2v4H5v-3H3v-4H1V8h3V5h1zM7 7h5v5H7zM16 9h3v3h-3zM7 16v3h2v-3zm4 0v3h2v-3zm4 0v3h1v-3z',
+        },
+        trilobite: {
+          label: 'Трилобит',
+          path: 'M8 2h8v2h3v3h2v10h-2v3h-3v2H8v-2H5v-3H3V7h2V4h3zM7 5h2v2H7zm8 0h2v2h-2zM5 9h5v2H5zm9 0h5v2h-5zM5 13h5v2H5zm9 0h5v2h-5zM7 17h3v2H7zm7 0h3v2h-3z',
+        },
+        fern: {
+          label: 'Папоротник',
+          path: 'M11 2h2v20h-2zM11 8H8V6H5V3h3v2h3zm2-2V3h6v2h-2v1zM11 13H8v-2H4V7h3v2h4zm2-1V9h4V7h4v4h-4v1zM11 18H7v-2H3v-4h3v2h5zm2-1v-3h5v-2h4v4h-5v1z',
+        },
+        brush: {
+          label: 'Кисточка',
+          path: 'M10 1h4v11h3v3h2v8H5v-8h2v-3h3zM8 17h1v5H8zm3 0h2v5h-2zm4 0h1v5h-1zM9 13h6v1H9z',
+        },
+        flask: {
+          label: 'Колба',
+          path: 'M8 1h8v3h-1v5l6 9v4H3v-4l6-9V4H8zM11 4v6l-5 8v2h12v-2l-5-8V4zM8 16h8l2 3H6z',
+        },
+        beer: {
+          label: 'Бутылка пива',
+          path: 'M9 1h6v3h-1v5l3 3v10H7V12l3-3V4H9zM9 14h6v5H9zM11 5h1v4h-1z',
+        },
+      };
+      const decorationStorageKey = 'interless-preview-decorations-v1';
+      Object.assign(previewFields, {
+        decorationsEnabled: true,
+        decorationDensity: 25,
+        decorationChance: 100,
+        decorationFrequency: 20,
+        decorationOpacity: 18,
+      });
+      for (const kind of Object.keys(decorationIcons)) previewFields['decoration' + kind] = true;
+      try {
+        const saved = JSON.parse(localStorage.getItem(decorationStorageKey) || 'null');
+        if (saved && typeof saved === 'object') {
+          if (typeof saved.decorationsEnabled === 'boolean')
+            previewFields.decorationsEnabled = saved.decorationsEnabled;
+          for (const key of [
+            'decorationDensity',
+            'decorationChance',
+            'decorationFrequency',
+            'decorationOpacity',
+          ]) {
+            const max = key === 'decorationOpacity' ? 70 : 100;
+            if (typeof saved[key] === 'number' && Number.isFinite(saved[key]))
+              previewFields[key] = Math.max(0, Math.min(max, saved[key]));
+          }
+          for (const kind of Object.keys(decorationIcons)) {
+            if (typeof saved['decoration' + kind] === 'boolean')
+              previewFields['decoration' + kind] = saved['decoration' + kind];
+          }
+        }
+      } catch {
+        /* All controls work without storage. */
+      }
+      function syncDecorationEditor() {
+        document.getElementById('decorations-enabled').checked = previewFields.decorationsEnabled;
+        for (const kind of Object.keys(decorationIcons))
+          document.getElementById('decoration-' + kind).checked =
+            previewFields['decoration' + kind];
+        for (const [id, key] of [
+          ['density', 'Density'],
+          ['chance', 'Chance'],
+          ['frequency', 'Frequency'],
+          ['opacity', 'Opacity'],
+        ]) {
+          const value = previewFields['decoration' + key];
+          document.getElementById('decoration-' + id).value = value;
+          document.getElementById('decoration-' + id + '-value').textContent = value + '%';
+        }
+        const active =
+          previewFields.decorationsEnabled &&
+          previewFields.decorationDensity > 0 &&
+          previewFields.decorationChance > 0 &&
+          Object.keys(decorationIcons).some((kind) => previewFields['decoration' + kind]);
+        document.getElementById('decoration-status').textContent = active
+          ? 'Случайные позиции и углы, без пересечений. Цвет — в палитре, пункт «Фоновые значки».'
+          : 'Фоновые значки отключены. Выбери хотя бы один вид и ненулевую плотность.';
+      }
+      function saveDecorations() {
+        const saved = {};
+        for (const key of Object.keys(previewFields).filter((key) => key.startsWith('decoration')))
+          saved[key] = previewFields[key];
+        try {
+          localStorage.setItem(decorationStorageKey, JSON.stringify(saved));
+        } catch {
+          /* Storage is optional. */
+        }
+        applyAppearance();
+      }
+      document.getElementById('decorations-enabled').onchange = (event) => {
+        previewFields.decorationsEnabled = event.target.checked;
+        saveDecorations();
+      };
+      for (const kind of Object.keys(decorationIcons))
+        document.getElementById('decoration-' + kind).onchange = (event) => {
+          previewFields['decoration' + kind] = event.target.checked;
+          saveDecorations();
+        };
+      for (const [id, key] of [
+        ['density', 'Density'],
+        ['chance', 'Chance'],
+        ['frequency', 'Frequency'],
+        ['opacity', 'Opacity'],
+      ])
+        document.getElementById('decoration-' + id).oninput = (event) => {
+          previewFields['decoration' + key] = Number(event.target.value);
+          saveDecorations();
+        };
+      const fontCatalog = [
+        { family: 'Press Start 2P', group: 'Пиксельные', size: 16 },
+        { family: 'Tiny5', group: 'Пиксельные', size: 30 },
+        { family: 'PT Sans', group: 'Обычные', size: 24 },
+        { family: 'Rubik', group: 'Обычные', size: 24 },
+        { family: 'Comfortaa', group: 'Обычные', size: 22 },
+        { family: 'Lora', group: 'С засечками', size: 24 },
+        { family: 'Marck Script', group: 'Рукописные', size: 28 },
+        { family: 'Bad Script', group: 'Рукописные', size: 26 },
+        { family: 'Caveat', group: 'Рукописные', size: 30 },
+        { family: 'Neucha', group: 'Рукописные', size: 26 },
+      ];
+      const fontStorageKey = 'interless-preview-font-v1';
+      try {
+        const saved = JSON.parse(localStorage.getItem(fontStorageKey) || 'null');
+        if (saved && fontCatalog.some((font) => font.family === saved.fontFamily)) {
+          previewFields.fontFamily = saved.fontFamily;
+          const size = Number(saved.fontSize);
+          previewFields.fontSize =
+            Number.isInteger(size) && size >= 10 && size <= 40
+              ? size
+              : fontCatalog.find((font) => font.family === saved.fontFamily).size;
+        }
+      } catch {
+        /* Font selection works without storage. */
+      }
+      function syncFontEditor() {
+        document.getElementById('font-family').value = previewFields.fontFamily;
+        document.getElementById('font-size').value = previewFields.fontSize;
+        document.getElementById('font-size-value').textContent = previewFields.fontSize + ' px';
+        const sample = document.getElementById('font-sample');
+        sample.style.fontFamily = '"' + previewFields.fontFamily + '", sans-serif';
+        sample.style.fontSize = previewFields.fontSize + 'px';
+      }
+      function saveFont() {
+        try {
+          localStorage.setItem(
+            fontStorageKey,
+            JSON.stringify({
+              fontFamily: previewFields.fontFamily,
+              fontSize: previewFields.fontSize,
+            }),
+          );
+        } catch {
+          /* Storage is optional. */
+        }
+        applyAppearance();
+      }
+      document.getElementById('font-family').onchange = (event) => {
+        const font = fontCatalog.find((font) => font.family === event.target.value);
+        if (!font) return;
+        previewFields.fontFamily = font.family;
+        previewFields.fontSize = font.size;
+        saveFont();
+      };
+      document.getElementById('font-size').oninput = (event) => {
+        previewFields.fontSize = Number(event.target.value);
+        saveFont();
+      };
+      const paletteTokens = {
+        textColor: { label: 'Текст сообщения', color: '#54218b' },
+        nameColor: { label: 'Текст ника', color: '#fff5ff' },
+        headerColor: { label: 'Верхняя плашка', color: '#512080' },
+        bubbleColor: { label: 'Нижняя плашка', color: '#eee4f8' },
+        borderColor: { label: 'Контур плашки', color: '#9956cf' },
+        frameColor: { label: 'Рамка — основной цвет', color: '#ae70e2' },
+        frameShadowColor: { label: 'Рамка — тёмный контур', color: '#6b2b9f' },
+        boneColor: { label: 'Косточки', color: '#f5eaff' },
+        boneHighlightColor: { label: 'Косточки — блики', color: '#fffaff' },
+        boneShadeColor: { label: 'Косточки — тени', color: '#d4b1ef' },
+        boneOutlineColor: { label: 'Косточки — контур', color: '#8d48c5' },
+        accentColor: { label: 'Узор верхней плашки', color: '#c297e7' },
+        accentShadeColor: { label: 'Мелкий узор верхней плашки', color: '#8c4bc0' },
+        dividerColor: { label: 'Разделитель плашек', color: '#d9bcef' },
+        badgeColor: { label: 'Символ значка роли', color: '#f4e7ff' },
+        badgeBackground: { label: 'Фон значка роли', color: '#59218a' },
+        badgeBorder: { label: 'Контур значка роли', color: '#ead8fb' },
+        shadowColor: { label: 'Тень плашки', color: '#5e238b' },
+        decorationColor: { label: 'Фоновые значки', color: '#b68cdb' },
+      };
+      const paletteStorageKey = 'interless-preview-palette-v1';
+      const customColors = {};
+      try {
+        const saved = JSON.parse(localStorage.getItem(paletteStorageKey) || '{}');
+        if (saved && typeof saved === 'object') {
+          for (const key of Object.keys(paletteTokens)) {
+            if (typeof saved[key] === 'string' && /^#[0-9a-f]{6}$/i.test(saved[key]))
+              customColors[key] = saved[key];
+          }
+        }
+      } catch {
+        /* A private browser can disable storage. Editing still works. */
+      }
+      previewFields.customColors = customColors;
+      function selectedPaletteKey() {
+        return document.getElementById('palette-element').value;
+      }
+      function effectivePaletteColor(key) {
+        if (customColors[key]) return customColors[key];
+        if (previewFields.colorScheme === 'dark') {
+          const dark = { bubbleColor: '#4b2678', headerColor: '#4b2678', textColor: '#e5d3f7' };
+          if (dark[key]) return dark[key];
+        }
+        return paletteTokens[key].color;
+      }
+      function syncPaletteEditor() {
+        const key = selectedPaletteKey();
+        const color = effectivePaletteColor(key);
+        document.getElementById('palette-color').value = color;
+        const hex = document.getElementById('palette-hex');
+        hex.value = color.toUpperCase();
+        hex.setAttribute('aria-invalid', 'false');
+        for (const [index, channel] of ['r', 'g', 'b'].entries()) {
+          document.getElementById('palette-' + channel).value = parseInt(
+            color.slice(1 + index * 2, 3 + index * 2),
+            16,
+          );
+        }
+        document.getElementById('palette-status').textContent = customColors[key]
+          ? 'Свой цвет: ' + paletteTokens[key].label + '. Сохраняется в этом браузере.'
+          : 'Исходный цвет: ' + paletteTokens[key].label + '. Роли сохраняют свою цветовую схему.';
+      }
+      function savePalette() {
+        try {
+          if (Object.keys(customColors).length)
+            localStorage.setItem(paletteStorageKey, JSON.stringify(customColors));
+          else localStorage.removeItem(paletteStorageKey);
+        } catch {
+          /* Storage is optional. */
+        }
+        applyAppearance();
+      }
+      function setPaletteColor(color) {
+        customColors[selectedPaletteKey()] = color.toLowerCase();
+        savePalette();
+      }
+      document.getElementById('palette-element').onchange = syncPaletteEditor;
+      document.getElementById('palette-color').oninput = (event) =>
+        setPaletteColor(event.target.value);
+      document.getElementById('palette-hex').oninput = (event) => {
+        const color = event.target.value;
+        const valid = /^#[0-9a-f]{6}$/i.test(color);
+        event.target.setAttribute('aria-invalid', String(!valid));
+        if (valid) setPaletteColor(color);
+      };
+      document.getElementById('palette-hex').onblur = syncPaletteEditor;
+      for (const channel of ['r', 'g', 'b']) {
+        document.getElementById('palette-' + channel).oninput = () => {
+          const values = ['r', 'g', 'b'].map((c) => document.getElementById('palette-' + c).value);
+          if (values.some((value) => value.trim() === '')) return;
+          const rgb = values.map(Number);
+          if (rgb.some((value) => !Number.isInteger(value) || value < 0 || value > 255)) return;
+          setPaletteColor('#' + rgb.map((value) => value.toString(16).padStart(2, '0')).join(''));
+        };
+        document.getElementById('palette-' + channel).onblur = syncPaletteEditor;
+      }
+      document.getElementById('palette-reset-element').onclick = () => {
+        delete customColors[selectedPaletteKey()];
+        savePalette();
+      };
+      document.getElementById('palette-reset-all').onclick = () => {
+        for (const key of Object.keys(customColors)) delete customColors[key];
+        savePalette();
+      };
+      document.getElementById('palette-editor').onkeydown = (event) => {
+        if (event.key === 'Enter' && event.target.tagName === 'INPUT') {
+          event.preventDefault();
+          event.target.blur();
+        }
+      };
+      const composer = document.getElementById('composer');
+      const textInput = document.getElementById('message');
+      function emitMessage(name, role, text) {
+        const login = name.toLowerCase();
+        window.dispatchEvent(
+          new CustomEvent('onEventReceived', {
+            detail: {
+              listener: 'message',
+              event: {
+                data: {
+                  time: Date.now(),
+                  tags: { badges: role ? role + '/1' : '' },
+                  nick: login,
+                  userId: login,
+                  displayName: name,
+                  badges: role ? [{ type: role, version: '1' }] : [],
+                  text,
+                  emotes: [],
+                  msgId: 'preview-' + counter++,
+                },
+              },
+            },
+          }),
+        );
+      }
+      function sendSample() {
+        emitMessage(...samples[sampleIndex++ % samples.length]);
+      }
+      function sendCustom(text) {
+        const name = document.getElementById('author').value.trim();
+        if (!/^[A-Za-z0-9_]{1,25}$/.test(name)) return;
+        emitMessage(name, document.getElementById('role').value, text);
+        const command = text.trim().toLowerCase();
+        if (window.InterlessChat.isHelpCommand(command)) {
+          document.getElementById('dino-editor').open = true;
+          document.getElementById('status').textContent =
+            'Список открыт. В Twitch его отправит бот StreamElements после установки команды.';
+          return;
+        }
+        const characterId = window.InterlessChat.characterIdForCommand(command);
+        const isCharacter =
+          characterId !== undefined && Object.hasOwn(window.InterlessChat.catalog, characterId);
+        if (isCharacter) {
+          window.dispatchEvent(
+            new CustomEvent('interless:preview-characters', {
+              detail: { characterIds: [characterId], userId: name.toLowerCase() },
+            }),
+          );
+          if (!document.querySelector('[data-user-id="' + name.toLowerCase() + '"]'))
+            emitMessage(name, document.getElementById('role').value, 'Проверяем ' + command);
+        }
+        document.getElementById('status').textContent = isCharacter
+          ? 'Для ' + name + ' выбран ' + command + '. Персонаж заменён в превью.'
+          : 'Добавлено сообщение от ' + name + '. Enter — отправить, Shift+Enter — новая строка.';
+      }
+      composer.onsubmit = (event) => {
+        event.preventDefault();
+        if (!textInput.value.trim()) return;
+        sendCustom(textInput.value);
+        textInput.value = '';
+        textInput.focus();
+      };
+      textInput.onkeydown = (event) => {
+        if (event.key === 'Enter' && !event.shiftKey && !event.isComposing) {
+          event.preventDefault();
+          composer.requestSubmit();
+        }
+      };
+      document.getElementById('send').onclick = sendSample;
+      let backgroundIndex = 0;
+      document.getElementById('background').onclick = () => {
+        backgroundIndex = (backgroundIndex + 1) % 3;
+        document.body.classList.toggle('light', backgroundIndex === 1);
+        document.body.classList.toggle('checker', backgroundIndex === 2);
+      };
+      function clearMessages() {
+        window.dispatchEvent(new Event('interless:clear-chat'));
+        sampleIndex = 0;
+        document.getElementById('status').textContent = 'Очищено. Следующая карточка будет слева.';
+      }
+      document.getElementById('clear').onclick = clearMessages;
+      document.getElementById('badges').onclick = () => {
+        clearMessages();
+        for (const [name, role, text] of [
+          ['Viewer', '', 'Обычный зритель'],
+          ['VIP', 'vip', 'VIP'],
+          ['Moderator', 'moderator', 'Модератор'],
+          ['LeadMod', 'lead_moderator', 'Главный модератор'],
+        ])
+          emitMessage(name, role, text);
+      };
+      document.getElementById('sequence').onclick = () => {
+        clearMessages();
+        for (let index = 1; index <= 4; index++) {
+          emitMessage(
+            'TestViewer',
+            '',
+            'Сообщение ' + index + ' — карточка ' + (index % 2 ? 'слева' : 'справа'),
+          );
+        }
+        document.getElementById('status').textContent =
+          'Четыре сообщения одного автора. Следующая карточка будет слева.';
+      };
+      const api = window.InterlessChat;
+      document.getElementById('bot-help').textContent = api.dinosaurHelp();
+      const presetOutput = document.getElementById('preset-output');
+      const transferStatus = document.getElementById('transfer-status');
+      function preparePreset() {
+        const code = api.encodePreset(previewFields);
+        presetOutput.value = code;
+        transferStatus.textContent =
+          'Пресет готов для сохранения и повторного открытия в превью. Для StreamElements используй четыре кнопки копирования выше.';
+        return code;
+      }
+      function applyImportedPreset(code) {
+        const imported = api.decodePreset(code);
+        Object.assign(previewFields, defaultFields, {
+          decorationsEnabled: true,
+          decorationDensity: 25,
+          decorationChance: 100,
+          decorationFrequency: 20,
+          decorationOpacity: 18,
+        });
+        for (const kind of Object.keys(decorationIcons)) previewFields['decoration' + kind] = true;
+        Object.assign(previewFields, imported);
+        const importedColors = imported.customColors;
+        for (const key of Object.keys(customColors)) delete customColors[key];
+        if (importedColors && typeof importedColors === 'object') {
+          for (const key of Object.keys(paletteTokens))
+            if (
+              typeof importedColors[key] === 'string' &&
+              /^#[0-9a-f]{6}$/i.test(importedColors[key])
+            )
+              customColors[key] = importedColors[key];
+        }
+        previewFields.customColors = customColors;
+        document.getElementById('preset').value = 'custom';
+        applyAppearance();
+        transferStatus.textContent = 'Пресет применён. Сообщения и личные персонажи сохранены.';
+      }
+      document.getElementById('preset-export').onclick = preparePreset;
+      document.getElementById('preset-copy').onclick = async () => {
+        const code = preparePreset();
+        try {
+          if (!navigator.clipboard) throw new Error('Clipboard unavailable');
+          await navigator.clipboard.writeText(code);
+          transferStatus.textContent =
+            'Пресет скопирован для открытия в превью. В StreamElements переноси оформление четырьмя кнопками выше.';
+        } catch {
+          presetOutput.focus();
+          presetOutput.select();
+          transferStatus.textContent =
+            'Браузер не дал доступ к буферу. Код выделен — нажми Ctrl+C.';
+        }
+      };
+      document.getElementById('preset-download').onclick = () => {
+        const code = preparePreset();
+        const url = URL.createObjectURL(
+          new Blob([JSON.stringify(JSON.parse(code), null, 2)], { type: 'application/json' }),
+        );
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = 'interless-chat-preset.json';
+        document.body.append(link);
+        link.click();
+        link.remove();
+        setTimeout(() => URL.revokeObjectURL(url), 1000);
+      };
+      document.getElementById('preset-import').onclick = () => {
+        try {
+          applyImportedPreset(presetOutput.value);
+        } catch (error) {
+          transferStatus.textContent = error.message;
+        }
+      };
+      document.getElementById('preset-file').onchange = async (event) => {
+        const file = event.target.files[0];
+        if (!file) return;
+        if (file.size > 200000) {
+          transferStatus.textContent = 'Файл слишком большой для пресета.';
+          return;
+        }
+        try {
+          const code = await file.text();
+          applyImportedPreset(code);
+          presetOutput.value = code;
+        } catch (error) {
+          transferStatus.textContent = error.message;
+        }
+      };
+      // Allow the React subscription effect to mount before delivering widget events.
+      setTimeout(() => {
+        try {
+          const saved = localStorage.getItem('interless-preview-settings-v1');
+          if (saved) applyImportedPreset(saved);
+        } catch {
+          /* Keep valid current controls. */
+        }
+        applyAppearance();
+        sendSample();
+        sendSample();
+        sendSample();
+      }, 150);
+    </script>
+  </body>
+</html>
