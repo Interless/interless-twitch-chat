@@ -439,6 +439,40 @@ try {
     [...document.querySelectorAll('article')].map((node) => node.dataset.messageId),
     decorationIds,
   );
+  // Exercise the original spam failure through the built event adapter and React renderer.
+  document.getElementById('clear').click();
+  const emoteName = 'gluepaTancy';
+  const repetitions = 40;
+  const emoteText = Array.from({ length: repetitions }, () => emoteName).join(' ');
+  window.dispatchEvent(
+    new window.CustomEvent('onEventReceived', {
+      detail: {
+        listener: 'message',
+        event: {
+          data: {
+            msgId: 'repeated-emote-regression',
+            userId: 'emote-tester',
+            nick: 'emotetester',
+            displayName: 'EmoteTester',
+            text: emoteText,
+            tags: {},
+            badges: [],
+            emotes: Array.from({ length: repetitions }, (_, index) => ({
+              id: 'test-emote',
+              name: emoteName,
+              urls: { 2: 'https://static-cdn.jtvnw.net/emoticons/v1/25/2.0' },
+              start: index * (emoteName.length + 1),
+              end: index * (emoteName.length + 1) + emoteName.length,
+            })),
+          },
+        },
+      },
+    }),
+  );
+  await flush();
+  const repeated = document.querySelector('[data-message-id="repeated-emote-regression"]');
+  assert.equal(repeated.querySelectorAll('img[alt="' + emoteName + '"]').length, repetitions);
+  assert.ok(!repeated.textContent.includes(emoteName));
   assert.deepEqual(errors, []);
   process.stdout.write(
     'Offline preview verified: composer, multiline text, safe text rendering, alternating sides, personal command, persistence, Enter/Shift+Enter controls, RGB palette ten bundled font choices and non-overlapping background icon controls.\n',

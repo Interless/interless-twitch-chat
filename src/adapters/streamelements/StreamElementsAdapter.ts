@@ -65,10 +65,10 @@ function parseBadges(data: Record<string, unknown>, tags: Record<string, unknown
   return badges;
 }
 
-function parseEmotes(value: unknown): EmoteSpan[] {
+function parseEmotes(value: unknown, rawPositions: unknown): EmoteSpan[] {
   if (!Array.isArray(value)) return [];
 
-  return value.flatMap((emote) => {
+  const emotes = value.flatMap((emote) => {
     if (!isRecord(emote) || !isRecord(emote.urls)) return [];
     const id = stringValue(emote.id);
     const name = stringValue(emote.name);
@@ -83,6 +83,22 @@ function parseEmotes(value: unknown): EmoteSpan[] {
       ? []
       : [{ id, name, start, end, url }];
   });
+  // Repeated positions may also be supplied by Twitch's raw emotes tag.
+  // Reuse only media already validated above; the tag cannot introduce a URL.
+  if (typeof rawPositions === 'string') {
+    const known = new Map(emotes.map((emote) => [emote.id, emote]));
+    for (const group of rawPositions.split('/')) {
+      const [id, positions] = group.split(':');
+      const emote = id === undefined ? undefined : known.get(id);
+      if (!emote || positions === undefined) continue;
+      for (const range of positions.split(',')) {
+        if (!/^\d+-\d+$/u.test(range)) continue;
+        const [start, end] = range.split('-').map(Number);
+        if (start !== undefined && end !== undefined) emotes.push({ ...emote, start, end });
+      }
+    }
+  }
+  return emotes;
 }
 
 export function normalizeChatMessage(value: unknown): ChatMessage | null {
@@ -120,7 +136,7 @@ export function normalizeChatMessage(value: unknown): ChatMessage | null {
       }),
     },
     text,
-    fragments: createMessageFragments(text, parseEmotes(value.emotes)),
+    fragments: createMessageFragments(text, parseEmotes(value.emotes, tags.emotes)),
     createdAt: numberValue(value.time) ?? Date.now(),
     isAction: flagValue(value.isAction),
   };

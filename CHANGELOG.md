@@ -6,6 +6,15 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ## [Unreleased]
 
+## [0.21.1] - 2026-10-23
+
+### Fixed
+
+- Preserve the final repeated Twitch emote when a provider sends an exclusive end equal to the message length.
+- Validate inclusive/exclusive ranges against emote names, retain separators and punctuation, and select Unicode/UTF-16 offsets across the full message.
+- Recover repeated positions from the raw Twitch emotes tag using only already validated image URLs; deduplicate overlapping positions.
+- Add unit and built-preview regressions for emote spam, emoji prefixes and malformed ranges.
+
 ## [0.21.0] - 2026-10-23
 
 ### Documentation and release packaging

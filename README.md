@@ -2,13 +2,13 @@
 
 ![Interless Chat — палеонтологический Twitch-чат](docs/images/project-header.svg)
 
-[![Версия](https://img.shields.io/badge/version-0.21.0-9956cf)](https://github.com/Interless/interless-twitch-chat/releases/tag/v0.21.0)
+[![Версия](https://img.shields.io/badge/version-0.21.1-9956cf)](https://github.com/Interless/interless-twitch-chat/releases/tag/v0.21.1)
 [![CI](https://github.com/Interless/interless-twitch-chat/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/Interless/interless-twitch-chat/actions/workflows/ci.yml)
 [![Лицензия MIT](https://img.shields.io/badge/license-MIT-6c8d71)](LICENSE)
 
 **Настраиваемый Twitch-чат с костяными рамками, персональными динозаврами и локальным редактором оформления.** Работает как Custom Widget в StreamElements и Browser Source в OBS. Собственный веб-сервер для установки не требуется.
 
-[Скачать версию 0.21.0](https://github.com/Interless/interless-twitch-chat/releases/tag/v0.21.0) · [Установить](docs/QUICKSTART.md) · [Все настройки](docs/CONFIGURATION.md) · [Решить проблему](docs/TROUBLESHOOTING.md)
+[Скачать версию 0.21.1](https://github.com/Interless/interless-twitch-chat/releases/tag/v0.21.1) · [Установить](docs/QUICKSTART.md) · [Все настройки](docs/CONFIGURATION.md) · [Решить проблему](docs/TROUBLESHOOTING.md)
 
 ## Как это работает
 
@@ -88,7 +88,7 @@
 - **Новые персонажи:** добавь их в набор превью, скопируй код и выбери медиа в StreamElements. В 0.21.0 свободных дополнительных слотов в панели ещё нет.
 - **Резервная копия оформления:** кнопка «Сохранить проект». Пресет JSON содержит только параметры; проект JSON дополнительно содержит локальные анимации.
 
-Полный список изменений по версиям: [CHANGELOG.md](CHANGELOG.md). Обзор текущего релиза: [0.21.0](docs/releases/v0.21.0.md).
+Полный список изменений по версиям: [CHANGELOG.md](CHANGELOG.md). Обзор текущего релиза: [0.21.1](docs/releases/v0.21.1.md).
 
 ## Разработка
 
@@ -111,8 +111,8 @@ npm run check
 
 - `dist/streamelements/preview.html` — полный локальный редактор;
 - `dist/streamelements/` — базовые вкладки виджета, инструкция и лицензии;
-- `dist/interless-twitch-chat-v0.21.0.zip` — архив установки;
-- `dist/interless-twitch-chat-v0.21.0.zip.sha256` — контрольная сумма.
+- `dist/interless-twitch-chat-v0.21.1.zip` — архив установки;
+- `dist/interless-twitch-chat-v0.21.1.zip.sha256` — контрольная сумма.
 
 Для своих настроек используй кнопки копирования **из превью**: базовые `widget.*` не включают твой локальный проект.
 

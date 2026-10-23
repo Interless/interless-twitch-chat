@@ -59,6 +59,47 @@ describe('StreamElements event normalization', () => {
     const message = normalizeChatMessage({ ...incomingMessage(payload), emotes: [] });
     expect(message?.fragments).toEqual([{ type: 'text', text: payload }]);
   });
+  it('keeps the final repeated emote with an exclusive end at the message length', () => {
+    const text = Array.from({ length: 4 }, () => 'Kappa').join(' ');
+    const metadata = incomingMessage().emotes[0];
+    const message = normalizeChatMessage({
+      ...incomingMessage(text),
+      emotes: Array.from({ length: 4 }, (_, index) => ({
+        ...metadata,
+        start: index * 6,
+        end: index * 6 + 5,
+      })),
+    });
+    expect(message?.fragments.filter((fragment) => fragment.type === 'emote')).toHaveLength(4);
+    expect(message?.fragments.at(-1)).toMatchObject({ type: 'emote', name: 'Kappa' });
+  });
+  it('uses raw Twitch repeat positions only with already validated emote media', () => {
+    const text = 'Kappa Kappa Kappa Kappa';
+    const metadata = incomingMessage().emotes[0];
+    const payload = {
+      ...incomingMessage(text),
+      tags: { emotes: '25:0-4,6-10,12-16,18-22/bad:0-4' },
+      emotes: [{ ...metadata, start: 0, end: 4 }],
+    };
+    const message = normalizeChatMessage(payload);
+    expect(message?.fragments.filter((fragment) => fragment.type === 'emote')).toHaveLength(4);
+    expect(normalizeChatMessage({ ...payload, emotes: [] })?.fragments).toEqual([
+      { type: 'text', text },
+    ]);
+    expect(
+      normalizeChatMessage({
+        ...payload,
+        emotes: [
+          {
+            ...metadata,
+            start: 0,
+            end: 4,
+            urls: { '2': 'https://attacker.example/x.png' },
+          },
+        ],
+      })?.fragments,
+    ).toEqual([{ type: 'text', text }]);
+  });
 
   it('normalizes both moderator deletion listeners and ignores unknown events', () => {
     expect(
