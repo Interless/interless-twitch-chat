@@ -45,7 +45,7 @@ jobs:
       - name: Verify and build
         run: npm run check
 
-      - name: Publish installation archive and checksum
+      - name: Publish installation archive
         env:
           GH_TOKEN: ${{ github.token }}
           GH_REPO: ${{ github.repository }}
@@ -55,8 +55,8 @@ jobs:
           notes="docs/releases/${TAG_NAME}.md"
           if gh release view "$TAG_NAME" >/dev/null 2>&1; then
             gh release edit "$TAG_NAME" --title "Interless Chat ${TAG_NAME}" --notes-file "$notes"
-            gh release upload "$TAG_NAME" "$archive" "${archive}.sha256" --clobber
+            gh release upload "$TAG_NAME" "$archive" --clobber
           else
-            gh release create "$TAG_NAME" "$archive" "${archive}.sha256" \
+            gh release create "$TAG_NAME" "$archive" \
               --verify-tag --title "Interless Chat ${TAG_NAME}" --notes-file "$notes"
           fi

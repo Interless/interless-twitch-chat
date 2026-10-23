@@ -24,11 +24,11 @@ git push origin HEAD:main
 После успешной публикации соответствующего коммита:
 
 ```bash
-git tag -a v0.21.0 -m "Interless Chat v0.21.0"
-git push origin v0.21.0
+git tag -a v0.21.1 -m "Interless Chat v0.21.1"
+git push origin v0.21.1
 ```
 
-Workflow `Release` проверяет соответствие тега версии пакета, запускает полную проверку, создаёт GitHub Release с заметками из `docs/releases/v0.21.0.md` и прикрепляет ZIP + SHA-256. В репозитории должны быть разрешены Actions и выдача `contents: write` этому release-job. Собственный PAT для workflow не требуется: используется стандартный `GITHUB_TOKEN`.
+Workflow `Release` проверяет соответствие тега версии пакета, запускает полную проверку, создаёт GitHub Release с заметками из `docs/releases/v0.21.1.md` и прикрепляет один установочный ZIP. В репозитории должны быть разрешены Actions и выдача `contents: write` этому release-job. Собственный PAT для workflow не требуется: используется стандартный `GITHUB_TOKEN`.
 
 Проверь результат в разделе Actions, затем в Releases. Ссылки «Скачать» в README ведут на release page, а не на стандартный GitHub Source code ZIP: в исходном ZIP нет собранного локального редактора.
 

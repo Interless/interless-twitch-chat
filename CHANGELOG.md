@@ -8,6 +8,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ## [0.21.1] - 2026-10-23
 
+### Changed
+
+- Publish only the installation ZIP in GitHub Releases; stop generating the separate `.zip.sha256` file.
+
 ### Fixed
 
 - Preserve the final repeated Twitch emote when a provider sends an exclusive end equal to the message length.

@@ -1,5 +1,4 @@
-import { createHash } from 'node:crypto';
-import { copyFile, mkdir, readFile, readdir, writeFile } from 'node:fs/promises';
+import { copyFile, mkdir, readFile, readdir, rm, writeFile } from 'node:fs/promises';
 import { resolve } from 'node:path';
 
 import { zipSync } from 'fflate';
@@ -115,8 +114,6 @@ const archive = zipSync(zipEntries, {
   mtime: new Date(1980, 0, 2),
 });
 await writeFile(archivePath, archive);
+await rm(`${archivePath}.sha256`, { force: true });
 
-const checksum = createHash('sha256').update(archive).digest('hex');
-await writeFile(`${archivePath}.sha256`, `${checksum}  ${archiveName}\n`, 'utf8');
-
-process.stdout.write(`Created ${archiveName} and SHA-256 checksum.\n`);
+process.stdout.write(`Created ${archiveName}.\n`);

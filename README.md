@@ -111,8 +111,7 @@ npm run check
 
 - `dist/streamelements/preview.html` — полный локальный редактор;
 - `dist/streamelements/` — базовые вкладки виджета, инструкция и лицензии;
-- `dist/interless-twitch-chat-v0.21.1.zip` — архив установки;
-- `dist/interless-twitch-chat-v0.21.1.zip.sha256` — контрольная сумма.
+- `dist/interless-twitch-chat-v0.21.1.zip` — архив установки.
 
 Для своих настроек используй кнопки копирования **из превью**: базовые `widget.*` не включают твой локальный проект.
 
