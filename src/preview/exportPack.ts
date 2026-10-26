@@ -48,6 +48,10 @@ export function createStreamElementsCode(
           ...sourceFields.chatScale,
           value: Math.round(normalizeConfig(settings).layout.scale * 100),
         },
+        displayTimeSeconds: {
+          ...sourceFields.displayTimeSeconds,
+          value: normalizeConfig(settings).general.displayTimeMs / 1000,
+        },
         ...library.fields,
       },
       null,

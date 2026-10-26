@@ -523,18 +523,6 @@
             id="bottom-offset-value"
             >32</output
           ></label
-        ><label class="opacity-row" for="display-time"
-          ><span>Время сообщения в эфире</span
-          ><input type="range" id="display-time" min="2" max="120" value="12" /><output
-            id="display-time-value"
-            >12</output
-          ></label
-        ><label class="opacity-row" for="max-messages"
-          ><span>Максимум сообщений</span
-          ><input type="range" id="max-messages" min="1" max="30" value="8" /><output
-            id="max-messages-value"
-            >8</output
-          ></label
         >
         <label class="select-row"
           >Привязка блока
@@ -552,13 +540,33 @@
             <option value="right">Всегда справа</option>
           </select></label
         >
+      </details>
+      <details class="palette-editor" id="message-lifetime" open>
+        <summary>Исчезновение сообщений</summary>
+        <label class="opacity-row" for="display-time"
+          ><span>Время до исчезновения</span
+          ><input type="range" id="display-time" min="2" max="600" value="30" /><output
+            id="display-time-value"
+            >30 с</output
+          ></label
+        ><label class="opacity-row" for="max-messages"
+          ><span>Максимум сообщений</span
+          ><input type="range" id="max-messages" min="1" max="30" value="8" /><output
+            id="max-messages-value"
+            >8</output
+          ></label
+        >
+        <small
+          >От 2 секунд до 10 минут. Такой же ползунок есть в StreamElements. При заполнении области
+          чата или достижении лимита старые сообщения уходят раньше.</small
+        >
         <label style="margin-top: 10px"
           ><input type="checkbox" id="preview-pinned" checked /> Держать сообщения в превью
           дольше</label
         >
         <small
-          >Закрепление продлевает просмотр до 120 секунд только здесь. В скопированный код попадёт
-          выбранное время сообщения в эфире.</small
+          >Только для проверки здесь: сообщения остаются минимум на 120 секунд. В эфир передаётся
+          выбранное время до исчезновения.</small
         >
       </details>
       <details class="palette-editor" id="dino-editor">
@@ -897,7 +905,7 @@
         transparent: { colorScheme: 'dark', bubbleOpacity: 0, headerOpacity: 0 },
       };
       const defaultFields = {
-        displayTimeSeconds: 12,
+        displayTimeSeconds: 30,
         maxMessages: 8,
         minWidth: 210,
         maxWidth: 260,
@@ -993,7 +1001,7 @@
       };
       const previewFields = {
         ...defaultFields,
-        displayTimeSeconds: 12,
+        displayTimeSeconds: 30,
         maxMessages: 8,
         idleMotion: 'pixel',
         idleFrequency: 20,
@@ -1014,7 +1022,7 @@
               fieldData: {
                 ...previewFields,
                 displayTimeSeconds: document.getElementById('preview-pinned').checked
-                  ? 120
+                  ? Math.max(120, previewFields.displayTimeSeconds)
                   : previewFields.displayTimeSeconds,
               },
             },

@@ -1,6 +1,6 @@
 {
   "name": "interless-twitch-chat",
-  "version": "0.21.1",
+  "version": "0.22.0",
   "private": true,
   "license": "MIT",
   "type": "module",
@@ -19,7 +19,8 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "test:preview": "node scripts/verify-preview.mjs && node scripts/verify-character-pack.mjs",
-    "check": "npm run format:check && npm run lint && npm run typecheck && npm run test && npm run build && npm run test:preview"
+    "test:layout": "node scripts/verify-layout.mjs",
+    "check": "npm run format:check && npm run lint && npm run typecheck && npm run test && npm run build && npm run test:preview && npm run test:layout"
   },
   "dependencies": {
     "react": "19.2.8",
@@ -39,6 +40,7 @@
     "fflate": "0.8.3",
     "globals": "17.12.0",
     "jsdom": "30.0.1",
+    "playwright": "1.62.1",
     "prettier": "3.9.6",
     "typescript": "6.0.3",
     "typescript-eslint": "8.69.0",

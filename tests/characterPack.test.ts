@@ -330,6 +330,28 @@ describe('portable character folders', () => {
     expect(normalizeConfig({ chatScale: 'bad' }).layout.scale).toBe(0.75);
     expect(normalizeConfig({ chatScale: '' }).layout.scale).toBe(0.75);
   });
+  it('exports and applies the lifetime slider without unlocking appearance or accepting invalid overrides', () => {
+    const settings = { displayTimeSeconds: 90, fontSize: 24 };
+    const code = createStreamElementsCode({
+      pack: null,
+      bundle: '',
+      css: '',
+      fields: {},
+      settings,
+    });
+    expect(JSON.parse(code.FIELDS) as unknown).toMatchObject({
+      displayTimeSeconds: { type: 'slider', value: 90, min: 2, max: 600 },
+    });
+    (globalThis as { __INTERLESS_WIDGET_PRESET__?: string }).__INTERLESS_WIDGET_PRESET__ =
+      encodePreset(settings);
+    (globalThis as { __INTERLESS_WIDGET_LOCKED__?: boolean }).__INTERLESS_WIDGET_LOCKED__ = true;
+    expect(normalizeConfig({}).general.displayTimeMs).toBe(90_000);
+    const live = normalizeConfig({ displayTimeSeconds: 180, fontSize: 10 });
+    expect(live.general.displayTimeMs).toBe(180_000);
+    expect(live.general.fontSize).toBe(24);
+    for (const invalid of ['', 'bad', null, false])
+      expect(normalizeConfig({ displayTimeSeconds: invalid }).general.displayTimeMs).toBe(90_000);
+  });
   it('applies imported presets and ignores invalid JSON', () => {
     const code = encodePreset({ fontSize: 24 });
     expect(normalizeConfig({ fontSize: 10, presetJson: code }).general.fontSize).toBe(24);

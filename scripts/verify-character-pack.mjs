@@ -118,6 +118,7 @@ try {
       fontSize: 24,
       characterSize: 180,
       chatScale: 125,
+      displayTimeSeconds: 90,
       bubbleOpacity: 37,
       headerOpacity: 64,
       decorationOpacity: 70,
@@ -154,6 +155,8 @@ try {
   assert.equal(JSON.parse(code.FIELDS).dinoCommand_newdino.value, '!боня');
   assert.equal(JSON.parse(code.FIELDS).chatScale.value, 125);
   assert.equal(JSON.parse(code.FIELDS).chatScale.type, 'slider');
+  assert.equal(JSON.parse(code.FIELDS).displayTimeSeconds.value, 90);
+  assert.equal(JSON.parse(code.FIELDS).displayTimeSeconds.max, 600);
   assert.equal(
     api
       .decodeProject(api.encodeProject({ chatScale: 125 }, api.getCharacterPack()))
@@ -264,6 +267,7 @@ try {
           dinoMedia_newdino: remoteMedia,
           dinoCommand_newdino: '!Барни',
           chatScale: 175,
+          displayTimeSeconds: 180,
           fontSize: 10,
         },
       },

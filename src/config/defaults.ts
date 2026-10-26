@@ -49,7 +49,7 @@ export const DEFAULT_CONFIG: WidgetConfig = {
   },
   appearance: { colorScheme: 'roles', bubbleOpacity: 1, headerOpacity: 1 },
   general: {
-    displayTimeMs: 12_000,
+    displayTimeMs: 30_000,
     maxMessages: 8,
     minWidth: 210,
     maxWidth: 260,

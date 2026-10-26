@@ -27,6 +27,7 @@ export function MessageLayer({ messages, config }: MessageLayerProps) {
   const style: LayerStyle = {
     '--chat-scale': String(config.layout.scale),
     '--motion-clearance': pixels(motion.mode === 'off' ? 0 : motion.distance * 2),
+    '--motion-horizontal-clearance': pixels(motion.mode === 'chaotic' ? motion.lateral : 0),
     alignItems: ALIGN_ITEMS[config.layout.alignment],
     '--horizontal-offset': pixels(config.layout.horizontalOffset),
     '--bottom-offset': pixels(config.layout.bottomOffset),

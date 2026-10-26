@@ -51,6 +51,12 @@ jobs:
       - name: Verify built preview and clipboard export
         run: npm run test:preview
 
+      - name: Install Chromium for layout checks
+        run: npx playwright install --with-deps chromium
+
+      - name: Verify text and frame bounds in Chromium
+        run: npm run test:layout
+
       - name: Upload installation artifact
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         with:

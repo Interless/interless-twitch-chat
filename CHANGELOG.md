@@ -6,6 +6,19 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ## [Unreleased]
 
+## [0.22.0] - 2026-10-26
+
+### Fixed
+
+- Use equal horizontal text insets; keep content constrained to the bubble.
+- Reserve space for protruding bone frames and idle motion at the viewport edges and between messages.
+- Give each new viewer a random uploaded character and persist the selection; assign existing preview messages when a pack is loaded, and replace unavailable selections.
+
+### Added
+
+- An expanded message disappearance section in the preview and a live StreamElements lifetime slider (2–600 seconds, 30 seconds for new projects).
+- Real Chromium geometry checks across narrow/wide viewports, alternating sides and 25–200% scale, plus timer and assignment regressions.
+
 ## [0.21.1] - 2026-10-23
 
 ### Changed

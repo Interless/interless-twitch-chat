@@ -43,7 +43,10 @@ jobs:
         run: npm ci
 
       - name: Verify and build
-        run: npm run check
+        # Geometry assertions use a real browser, in addition to jsdom checks.
+        run: |
+          npx playwright install --with-deps chromium
+          npm run check
 
       - name: Publish installation archive
         env:

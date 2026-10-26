@@ -41,6 +41,9 @@ try {
   assert.equal(document.getElementById('random-dinosaurs').disabled, true);
   assert.equal(document.getElementById('skel'), null);
   assert.equal(document.getElementById('dance'), null);
+  assert.equal(document.getElementById('display-time').max, '600');
+  assert.equal(document.getElementById('display-time').value, '30');
+  assert.equal(document.getElementById('message-lifetime').open, true);
 
   const initial = [...document.querySelectorAll('article')];
   assert.deepEqual(

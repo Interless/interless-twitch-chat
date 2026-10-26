@@ -55,7 +55,7 @@ describe('normalizeConfig', () => {
       enterAnimation: 'explode',
     });
 
-    expect(config.general.displayTimeMs).toBe(120_000);
+    expect(config.general.displayTimeMs).toBe(600_000);
     expect(config.general.maxMessages).toBe(1);
     expect(config.general.maxWidth).toBe(500);
     expect(config.general.fontSize).toBe(72);

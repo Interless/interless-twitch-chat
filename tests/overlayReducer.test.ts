@@ -77,6 +77,65 @@ describe('overlayReducer', () => {
 });
 
 describe('alternating messages and personal dinosaurs', () => {
+  it('assigns from the full catalog once per user and preserves the choice after eviction, clear and reload', () => {
+    const config = normalizeConfig({ maxMessages: 30 });
+    let state = overlayReducer(
+      { ...INITIAL_OVERLAY_STATE, characterSeed: 123456 },
+      { type: 'config-loaded', config },
+    );
+    for (let i = 0; i < 20; i++) {
+      state = overlayReducer(state, {
+        type: 'message-received',
+        message: createChatMessage({
+          id: `first-${String(i)}`,
+          user: { ...createChatMessage().user, id: `viewer-${String(i)}` },
+        }),
+      });
+    }
+    expect(new Set(state.messages.map((a) => a.characterId))).toEqual(new Set(['alpha', 'beta']));
+    const preferences = { ...state.userCharacters };
+    expect(Object.keys(preferences)).toHaveLength(20);
+    state = overlayReducer(state, { type: 'chat-cleared' });
+    state = overlayReducer(
+      { ...state, characterSeed: 99999, userCharacters: preferences },
+      { type: 'config-loaded', config },
+    );
+    state = overlayReducer(state, {
+      type: 'message-received',
+      message: createChatMessage({
+        id: 'returned',
+        user: { ...createChatMessage().user, id: 'viewer-0' },
+      }),
+    });
+    expect(state.messages[0]?.characterId).toBe(preferences['viewer-0']);
+    expect(state.messages[0]?.side).toBe('left');
+  });
+
+  it('assigns existing preview authors when a pack is added and reassigns a removed choice', () => {
+    installCharacterPack(null);
+    let state = overlayReducer(INITIAL_OVERLAY_STATE, {
+      type: 'config-loaded',
+      config: normalizeConfig({}),
+    });
+    state = overlayReducer(state, { type: 'message-received', message: createChatMessage() });
+    expect(state.messages[0]?.characterId).toBeNull();
+    installCharacterPack(TEST_CHARACTER_PACK);
+    state = overlayReducer(state, { type: 'config-loaded', config: normalizeConfig({}) });
+    const selected = state.messages[0]?.characterId;
+    expect(['alpha', 'beta']).toContain(selected);
+    expect(state.userCharacters['user-1']).toBe(selected);
+    const alpha = TEST_CHARACTER_PACK.characters.alpha;
+    if (!alpha) throw new Error('Missing test character');
+    installCharacterPack({ version: 1, characters: { gamma: alpha } });
+    state = overlayReducer(state, { type: 'config-loaded', config: normalizeConfig({}) });
+    expect(state.messages[0]?.characterId).toBe('gamma');
+    expect(state.userCharacters['user-1']).toBe('gamma');
+    installCharacterPack(null);
+    state = overlayReducer(state, { type: 'config-loaded', config: normalizeConfig({}) });
+    expect(state.messages[0]?.characterId).toBeNull();
+    expect(state.userCharacters).toEqual({});
+  });
+
   it('alternates accepted messages and keeps sides through filtering, deletion and eviction', () => {
     let state = overlayReducer(INITIAL_OVERLAY_STATE, {
       type: 'config-loaded',
@@ -123,7 +182,8 @@ describe('alternating messages and personal dinosaurs', () => {
       message: createChatMessage({ id: 'command', text: '  !AlPhA  ' }),
     });
     expect(state.messages).toHaveLength(1);
-    expect(state.messages[0]?.characterId).toBeNull();
+    const initialChoice = state.messages[0]?.characterId;
+    expect(['alpha', 'beta']).toContain(initialChoice);
     state = overlayReducer(state, {
       type: 'message-received',
       message: createChatMessage({ id: 'new' }),
@@ -135,7 +195,11 @@ describe('alternating messages and personal dinosaurs', () => {
         user: { ...createChatMessage().user, id: 'user-2' },
       }),
     });
-    expect(state.messages.map(({ characterId }) => characterId)).toEqual([null, 'alpha', null]);
+    expect(state.messages.map(({ characterId }) => characterId).slice(0, 2)).toEqual([
+      initialChoice,
+      'alpha',
+    ]);
+    expect(['alpha', 'beta']).toContain(state.messages[2]?.characterId);
     expect(state.messages.map(({ side }) => side)).toEqual(['left', 'right', 'left']);
   });
 

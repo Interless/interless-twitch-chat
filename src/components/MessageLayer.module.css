@@ -7,12 +7,19 @@
   transform: scale(var(--chat-scale, 1));
   transform-origin: top left;
   --chat-viewport-width: calc(100vw / var(--chat-scale, 1));
-  --chat-horizontal-padding: calc(var(--horizontal-offset) / var(--chat-scale, 1));
+  --chat-horizontal-padding: max(
+    calc(var(--horizontal-offset) / var(--chat-scale, 1)),
+    calc(16px + var(--motion-horizontal-clearance, 0px))
+  );
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
-  gap: calc(var(--message-gap) + var(--motion-clearance, 0px));
-  padding: 0 var(--chat-horizontal-padding) calc(var(--bottom-offset) / var(--chat-scale, 1));
+  gap: calc(max(var(--message-gap), 32px) + var(--motion-clearance, 0px));
+  padding: 0 var(--chat-horizontal-padding)
+    max(
+      calc(var(--bottom-offset) / var(--chat-scale, 1)),
+      calc(16px + var(--motion-clearance, 0px) / 2)
+    );
   overflow: hidden;
   pointer-events: none;
 }

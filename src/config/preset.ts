@@ -47,15 +47,20 @@ export function applyPresetFields(value: unknown): Record<string, unknown> {
         (globalThis as { __INTERLESS_WIDGET_LOCKED__?: unknown }).__INTERLESS_WIDGET_LOCKED__ ===
         true;
       if (locked || base.settingsSource !== 'fields') {
-        const liveScale = base.chatScale;
-        const validLiveScale =
-          (typeof liveScale === 'number' ||
-            (typeof liveScale === 'string' && liveScale.trim() !== '')) &&
-          Number.isFinite(Number(liveScale));
+        const liveSettings = Object.fromEntries(
+          ['chatScale', 'displayTimeSeconds'].flatMap((key) => {
+            const value = base[key];
+            return (typeof value === 'number' ||
+              (typeof value === 'string' && value.trim() !== '')) &&
+              Number.isFinite(Number(value))
+              ? [[key, value]]
+              : [];
+          }),
+        );
         return {
           ...base,
           ...settings,
-          ...(locked && validLiveScale ? { chatScale: liveScale } : {}),
+          ...(locked ? liveSettings : {}),
         };
       }
       base = { ...settings, ...base };

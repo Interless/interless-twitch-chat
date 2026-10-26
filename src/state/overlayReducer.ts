@@ -13,6 +13,7 @@ export interface OverlayState {
   messages: ActiveMessage[];
   nextSide: 'left' | 'right';
   userCharacters: Record<string, string>;
+  characterSeed: number;
 }
 
 export type OverlayAction =
@@ -30,7 +31,29 @@ export const INITIAL_OVERLAY_STATE: OverlayState = {
   messages: [],
   nextSide: 'left',
   userCharacters: {},
+  characterSeed: 0,
 };
+
+// A session seed is supplied once at startup. The reducer stays deterministic,
+// and saved per-user choices take priority over this initial random selection.
+function initialCharacter(state: OverlayState, userId: string): string | null {
+  const pool = Object.keys(state.config.dinosaurs).filter(
+    (id) => typeof state.config.dinosaurs[id]?.characterUrl === 'string',
+  );
+  if (pool.length === 0) return null;
+  let hash = state.characterSeed;
+  for (const char of userId) hash = Math.imul(hash ^ char.charCodeAt(0), 16777619);
+  return pool[(hash >>> 0) % pool.length] ?? null;
+}
+
+function characterForUser(state: OverlayState, message: ChatMessage): string | null {
+  const selected = state.userCharacters[message.user.id];
+  if (selected !== undefined && Object.hasOwn(state.config.dinosaurs, selected)) return selected;
+  const assigned = state.config.userDinosaurs[message.user.login.toLowerCase()];
+  return assigned !== undefined && Object.hasOwn(state.config.dinosaurs, assigned)
+    ? assigned
+    : initialCharacter(state, message.user.id);
+}
 
 function shouldSuppressMessage(message: ChatMessage, config: WidgetConfig): boolean {
   if (config.general.hideCommands && message.text.trimStart().startsWith('!')) return true;
@@ -57,22 +80,25 @@ function addMessage(state: OverlayState, message: ChatMessage): OverlayState {
   }
   if (shouldSuppressMessage(message, state.config)) return state;
 
-  const selected = state.userCharacters[message.user.id];
-  const login = message.user.login.toLowerCase();
-  const assigned = Object.hasOwn(state.config.userDinosaurs, login)
-    ? state.config.userDinosaurs[login]
-    : undefined;
+  const selected = characterForUser(state, message);
   const nextMessage: ActiveMessage = {
     message,
     lifecycle: 'entering',
     side: state.nextSide,
-    characterId:
-      selected !== undefined && Object.hasOwn(state.config.dinosaurs, selected)
-        ? selected
-        : (assigned ?? null),
+    characterId: selected,
   };
   const messages = [...state.messages, nextMessage].slice(-state.config.general.maxMessages);
-  return { ...state, messages, nextSide: state.nextSide === 'left' ? 'right' : 'left' };
+  return {
+    ...state,
+    messages,
+    userCharacters:
+      selected !== null &&
+      state.userCharacters[message.user.id] !== selected &&
+      !Object.hasOwn(state.config.userDinosaurs, message.user.login.toLowerCase())
+        ? { ...state.userCharacters, [message.user.id]: selected }
+        : state.userCharacters,
+    nextSide: state.nextSide === 'left' ? 'right' : 'left',
+  };
 }
 
 export function overlayReducer(state: OverlayState, action: OverlayAction): OverlayState {
@@ -118,19 +144,29 @@ export function overlayReducer(state: OverlayState, action: OverlayAction): Over
     }
 
     case 'config-loaded': {
-      const messages = state.messages
-        .filter((active) => !shouldSuppressMessage(active.message, action.config))
-        .slice(-action.config.general.maxMessages)
-        .map((active) =>
-          active.characterId !== null && !Object.hasOwn(action.config.dinosaurs, active.characterId)
-            ? { ...active, characterId: null }
-            : active,
-        );
       const userCharacters = Object.fromEntries(
         Object.entries(state.userCharacters).filter(([, id]) =>
           Object.hasOwn(action.config.dinosaurs, id),
         ),
       );
+      const updated = { ...state, config: action.config, userCharacters };
+      const messages = state.messages
+        .filter((active) => !shouldSuppressMessage(active.message, action.config))
+        .slice(-action.config.general.maxMessages)
+        .map((active) => {
+          if (
+            active.characterId !== null &&
+            Object.hasOwn(action.config.dinosaurs, active.characterId)
+          )
+            return active;
+          const characterId = characterForUser(updated, active.message);
+          if (
+            characterId !== null &&
+            !Object.hasOwn(action.config.userDinosaurs, active.message.user.login.toLowerCase())
+          )
+            userCharacters[active.message.user.id] = characterId;
+          return { ...active, characterId };
+        });
       return { ...state, config: action.config, initialized: true, messages, userCharacters };
     }
     case 'message-received':

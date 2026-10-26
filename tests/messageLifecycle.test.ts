@@ -10,6 +10,28 @@ afterEach(() => {
 });
 
 describe('MessageLifecycleService', () => {
+  it('extends an existing message from its original arrival when the lifetime slider changes', () => {
+    vi.useFakeTimers();
+    const change = vi.fn();
+    const service = new MessageLifecycleService(change);
+    const messages = [createActiveMessage({ message: createChatMessage({ createdAt: 0 }) })];
+    service.sync(messages, DEFAULT_CONFIG, 0);
+    vi.advanceTimersByTime(20_000);
+    const config = {
+      ...DEFAULT_CONFIG,
+      general: { ...DEFAULT_CONFIG.general, displayTimeMs: 90_000 },
+    };
+    service.sync(messages, config, 20_000);
+    vi.advanceTimersByTime(69_999);
+    expect(change).not.toHaveBeenCalledWith('message-1', 'exiting');
+    expect(change).not.toHaveBeenCalledWith('message-1', 'removed');
+    vi.advanceTimersByTime(1);
+    expect(change).toHaveBeenLastCalledWith('message-1', 'exiting');
+    vi.advanceTimersByTime(config.animation.exitDurationMs);
+    expect(change).toHaveBeenLastCalledWith('message-1', 'removed');
+    service.dispose();
+  });
+
   it('moves through visible, exiting, and removed states', () => {
     vi.useFakeTimers();
     const onStateChange = vi.fn();

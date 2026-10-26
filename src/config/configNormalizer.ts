@@ -192,7 +192,7 @@ export function normalizeConfig(value: unknown): WidgetConfig {
     },
     general: {
       displayTimeMs:
-        numberInRange(fields.displayTimeSeconds, defaults.general.displayTimeMs / 1000, 2, 120) *
+        numberInRange(fields.displayTimeSeconds, defaults.general.displayTimeMs / 1000, 2, 600) *
         1000,
       maxMessages: Math.round(
         numberInRange(fields.maxMessages, defaults.general.maxMessages, 1, 30),

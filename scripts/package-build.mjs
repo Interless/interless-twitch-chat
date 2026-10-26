@@ -23,7 +23,11 @@ await Promise.all([
   ),
   writeFile(
     resolve(installDirectory, 'fields.json'),
-    JSON.stringify({ chatScale: sourceFields.chatScale }, null, 2),
+    JSON.stringify(
+      { chatScale: sourceFields.chatScale, displayTimeSeconds: sourceFields.displayTimeSeconds },
+      null,
+      2,
+    ),
   ),
   copyFile(resolve(projectRoot, 'docs/QUICKSTART.md'), resolve(installDirectory, 'INSTALL.md')),
 ]);

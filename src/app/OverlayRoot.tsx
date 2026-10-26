@@ -13,6 +13,7 @@ import {
 export function OverlayRoot() {
   const [state, dispatch] = useReducer(overlayReducer, INITIAL_OVERLAY_STATE, (initial) => ({
     ...initial,
+    characterSeed: Math.floor(Math.random() * 0x1_0000_0000),
     userCharacters: loadCharacterPreferences(),
   }));
   const [adapter] = useState(() => new StreamElementsAdapter());
